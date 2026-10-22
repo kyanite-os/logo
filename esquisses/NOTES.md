@@ -13,6 +13,13 @@ Chaque pan du biseau prend sa valeur de l'orientation de son arête sous
 
 - Les deux obliques n'ont ni la même pente (4/7 et 5/8), ni la même
   longueur, ni la même épaisseur, ni le tranchant à la même abscisse.
+- **Les attaches sont courtes.** La fourche est descendue à mi-hauteur
+  moins deux, et la branche basse rejoint le jambage sur 23 unités
+  seulement : le contre-poinçon du bas fait 19 unités de haut contre 11
+  auparavant. Sans ça la branche basse et le jambage se lisaient comme
+  une seule masse.
+- Épaisseurs : jambage 24, branche haute 20,8, branche basse 19,5.
+  Le biseau est descendu à 3 pour laisser respirer les encoches.
 - **Le sommet et le pied du jambage ne sont pas de même nature** :
   en haut une seule coupe oblique franche, d'un seul geste ; en bas un
   angle droit franc à gauche — sans aucune coupe, le flanc reste
