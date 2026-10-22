@@ -93,14 +93,27 @@ straight contour:
 1. **The blades** of kyanite, broken into six segments with a
    perpendicular drift at each node. Two neighbouring blades share
    exactly the same break: they tile the band with no gap.
-2. **The lamellae**, short and fine, caught between the big ones. They
-   are shards, not lines that cross. *(See the note at the end of this
-   file: the shipped code does not currently do this.)*
+2. **The lamellae**, fine striations caught between the big blades. They
+   run the full length of the band — the whole height of the stem, the
+   whole width of each arm — each one wandering a couple of units
+   sideways over that span and broken into five or six segments, so that
+   none of them is a straight line. Kyanite grows in long blades; striations
+   that follow the same habit read as the grain of the mineral, where
+   shorter marks would read as scattering.
 3. **The granite grain**, at three sizes, with uneven density.
 4. **The dry fractures**, across the cleavage, all of different length,
    width and contrast. One in three does not catch the light. These stay
    open: they are surface micro-cracks, not the fracture that runs
    through.
+
+An earlier pair of `fines_axis` and `fines_stem` drew the lamellae as
+short shards instead, and this journal described them that way for a
+while. Those two functions sat in `block.py` alongside their
+replacements, shadowed by them, so the shards had never actually
+rendered — the drawing has always had the crossing version. Put side by
+side the two differ across about a third of the pixels but by an average
+of 2.3 out of 255: broad and shallow, texture rather than structure. The
+crossing version is kept, and the dead copy is gone.
 
 The bevel is double: a narrow keen edge (0.8) that parts from its facet —
 darker in shadow, keener in daylight — then the main facet.
@@ -203,18 +216,3 @@ pulling towards the top-left corner. That is the order in which the icon
 has to be thought about — and the distinction matters when tuning it.
 There is nothing to reclaim by cutting the seam at that size; there is
 only no point counting on it.
-
-## A gap between this journal and the code
-
-Under *Fineness* above, the fine lamellae are described as short shards
-that do not cross the band. **The shipped code does not draw them that
-way.** `block.py` carried two definitions of `fines_axis` and
-`fines_stem`: an earlier pair that drew short shards, and a later pair,
-spanning the full width of the band, that shadowed them. Python keeps the
-later one, so the short-shard version had never rendered.
-
-The dead copy has been removed, so the file now says what it does. The
-description above is the intent; the files show the crossing version.
-Switching is a small change to those two functions — and it changes the
-shipped drawing, so it is left as a decision to make, not a bug to
-quietly fix.
