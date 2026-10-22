@@ -1,73 +1,25 @@
 Copyright (c) 2025 the Kyanite project
 
-THE KYANITE NAME AND LOGO ARE NOT FREE SOFTWARE
-===============================================
+Kyanite's code is free software. The name "Kyanite" and this logo are not:
+all rights in the designs and files in this repository are reserved.
 
-Kyanite's *code* is released under a free software licence, in its own
-repositories. This repository holds something different: the artwork and
-the name that identify the project. They are reserved, and this file says
-exactly what that means.
+You may reproduce the logo, unmodified, to refer to Kyanite — an article, a
+talk, documentation, a list of links, a package repository that distributes
+Kyanite, a screenshot of a machine running it. That is nominative use, and it
+needs no permission. Pick the variant that suits your background rather than
+recolouring, and keep the proportions.
 
-All rights in the designs, drawings, image files and source files in this
-repository are reserved by the Kyanite project.
+You may not use the name or the logo to name, brand or sign anything that is
+not the Kyanite project; modify the logo and still call it the Kyanite logo;
+imply an endorsement that does not exist; or register either as a trademark,
+domain or account name that would be taken for the project itself.
 
+Build your own image from the free code as much as you like — that is the
+point of releasing it. But it is your project: give it its own name and its
+own mark. You may say truthfully that it is based on Kyanite.
 
-WHAT YOU MAY DO WITHOUT ASKING
-------------------------------
+The word in the logotype is set in Inter, by Rasmus Andersson, under the SIL
+Open Font License 1.1. Inter is not covered by the reservation above; its own
+licence applies, and it permits derivative works.
 
-You may reproduce the logo, unmodified, to refer to Kyanite. For example:
-
-  - an article, a review, a blog post or a talk about Kyanite;
-  - documentation, a tutorial or a course that covers Kyanite;
-  - a list of links, a directory, a distribution gallery;
-  - a package repository or a mirror that distributes Kyanite itself;
-  - a screenshot, or a system that has Kyanite installed on it.
-
-This is nominative use: using the mark to name the thing it names. You do
-not need permission for it, and you do not need to ask us first.
-
-When you do, use the files as delivered: pick the variant that suits your
-background rather than recolouring, and keep the proportions. The usage
-notes in logo/README.md are guidance, not extra conditions.
-
-
-WHAT YOU MAY NOT DO
--------------------
-
-  - Use the name "Kyanite" or this logo to name, brand or sign anything
-    that is not the Kyanite project: a derived image, a product, a
-    service, an application, a repository or an organisation.
-  - Modify the logo and keep calling it the Kyanite logo.
-  - Use either in a way that suggests the project endorses, sponsors or
-    is affiliated with you, when it does not.
-  - Register either as a trademark, or as a domain name or account name
-    that would be taken for the project itself.
-
-
-DERIVED IMAGES
---------------
-
-Kyanite's code is free software, and you are welcome to build your own
-image from it — that is the point of releasing it. But a derived image is
-your project, not ours.
-
-Give it its own name and its own mark. You may say truthfully that it is
-"based on Kyanite" or "built from Kyanite"; you may not call it Kyanite,
-nor ship it carrying this logo.
-
-
-FONTS AND THIRD-PARTY MATERIAL
-------------------------------
-
-The word in the logotype is set in Inter, by Rasmus Andersson, which is
-licensed under the SIL Open Font License 1.1. Inter is not covered by the
-reservation above; its own licence applies to it, and it explicitly
-permits derivative works. The word is converted to outlines in the
-delivered files, so no font is required to display them.
-
-
-ANYTHING ELSE
--------------
-
-For any use outside what is permitted above, ask. The project would
-rather say yes to a reasonable request than have people guess.
+For anything outside this, ask.

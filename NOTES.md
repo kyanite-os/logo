@@ -110,17 +110,16 @@ spangles at 1.30. Both knobs are at the bottom of `tools/draw.py`.
 
 ## The two grounds
 
-The drawing was cut for a dark background, and for a long time that was
-the only version. It does not survive on a light one, and not for a
-reason that tuning can fix.
+The drawing was cut for a dark background, and does not survive on a
+light one — not for a reason that tuning can fix.
 
-Everything is lit by one light from the top left, and the keenest facet —
-the one that draws the contour — blows out to near-white (`#DBEBFF`).
-That works against `#0F1522`: 15.07:1. Against `#FFFFFF` the same edge is
-**1.21:1**. Measured on the rendered pixels, about 40% of the contour
-falls below 3:1 on white. The shape opens up at the top left.
+The keenest facet, the one that draws the contour, blows out to
+near-white (`#DBEBFF`). Against `#0F1522` that is 15.07:1; against
+`#FFFFFF` it is **1.21:1**. Measured on the rendered pixels, about 40% of
+the contour falls below 3:1 on white, and the shape opens up at the top
+left.
 
-The fix is not to move the light, and not to recolour. It is to move the
+The fix is neither to move the light nor to recolour, but to move the
 whole value scale. On a dark ground the block is a lit mass in a
 near-black room, so its brightest facet can exceed everything around it.
 On a light ground white is the brightest thing in the frame, so the stone
@@ -139,13 +138,14 @@ the dark palette's:
 
 The light comes from the same place; it is the room that changed.
 
-The asymmetry this produces is worth stating, because it explains why
-there have to be two files and not one clever one. On a dark ground the
-contour is held by the **bright** keen edge, and the deepest facet is
-*meant* to melt into the background. On a light ground the contour is
-held by the **mass**, at 18.6:1 at its deepest, and the keen edge is
-merely the palest part of the stone, at 3.47:1 — lighter than the stone,
-never lighter than the page.
+The asymmetry explains why there have to be two files and not one clever
+one. On a dark ground the contour is held by the **bright** keen edge,
+and the deepest facet is *meant* to melt into the background. On a light
+ground the contour is held by the **mass**, 18.6:1 at its deepest, and
+the keen edge is merely the palest part of the stone at 3.47:1 — lighter
+than the stone, never lighter than the page. On Breeze Light (`#EFF0F1`),
+which is where most of this will actually be seen, it still holds at
+3.04:1.
 
 `block.py` checks this numerically on every build, the same way it checks
 that no bevel facet flips over: the keen edge must clear 3:1 against its
@@ -154,8 +154,7 @@ white, which is how the gap was found rather than guessed at.
 
 ## Palette
 
-See [`logo/README.md`](logo/README.md#palette) for both grounds in full.
-Reference backgrounds: `#0F1522` dark, `#FFFFFF` light.
+Both grounds in full in [`logo/README.md`](logo/README.md#palette).
 
 ## Constraints held
 
@@ -165,6 +164,9 @@ polygons.
 The generator checks numerically that no bevel facet flips over: on an
 edge shorter than the bevel, the two neighbouring facets would close in
 on each other and make a tooth. They are folded to a point instead.
+
+The drawing deliberately resembles neither Fedora's "f" nor KDE's gear,
+which are registered trademarks.
 
 ## The icon version
 

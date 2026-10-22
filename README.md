@@ -17,8 +17,6 @@ Its logo is a **K cut from a block of kyanite**, the blue mineral the project is
 | [`NOTES.md`](NOTES.md) | The design journal: why the drawing is what it is. |
 | [`LICENSE`](LICENSE) | What you may and may not do with the mark. |
 
-It comes in two grounds — one for dark backgrounds, one for light — because a single
-drawing cannot do both: the edge that carries the contour on one ground disappears on
-the other. See [`logo/README.md`](logo/README.md#which-ground).
+It comes on two grounds, dark and light, because the edge that draws the contour on one disappears on the other.
 
-Kyanite's code is free software. **The name and this logo are not**: see [`LICENSE`](LICENSE).
+Kyanite's code is free software. **The name and this logo are not.**
