@@ -1,128 +1,176 @@
-# Le logo de Kyanite
+# The Kyanite logo
 
-Un K taillé dans un bloc de kyanite, traversé d'un filon de résine
-qui en scelle la fracture. Pour fond sombre.
+A K cut from a block of kyanite, crossed by a vein of resin that seals
+its fracture. It comes on two grounds: one for dark backgrounds, one for
+light.
 
-![Le logotype Kyanite](png/banniere.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="png/banner.png">
+  <source media="(prefers-color-scheme: light)" srcset="png/banner-light.png">
+  <img alt="The Kyanite logotype" src="png/banner.png">
+</picture>
 
-## Les fichiers
+## The files
 
-| fichier | pour quoi |
+Files with no suffix are for **dark** backgrounds; the `-light` ones are
+for **light** backgrounds. Same geometry, same light from the top left —
+only the values differ.
+
+| file | what for |
 |---|---|
-| `kyanite-logo.svg` | Le dessin complet. Site, bandeau de l'installeur, tout ce qui s'affiche **à 64 px ou plus**. |
-| `kyanite-icon.svg` | La version simplifiée, pour **moins de 64 px** : icône système, favicon, barre des tâches. |
-| `kyanite-logotype.svg` | Le symbole suivi du mot « Kyanite ». |
-| `png/kyanite-<taille>.png` | 16, 22, 24, 32, 48, 64, 128, 256, 512 px, fond transparent. |
-| `png/banniere.png` | Le logotype **avec son fond sombre**, pour un README ou une page dont on ne maîtrise pas le thème. |
+| `kyanite-logo.svg` · `kyanite-logo-light.svg` | The full drawing. Website, installer banner, anything shown **at 64 px or more**. |
+| `kyanite-icon.svg` · `kyanite-icon-light.svg` | The simplified version, for **under 64 px**: system icon, favicon, taskbar. |
+| `kyanite-logotype.svg` · `kyanite-logotype-light.svg` | The symbol followed by the word "Kyanite". |
+| `png/kyanite-<size>.png` · `png/kyanite-<size>-light.png` | 16, 22, 24, 32, 48, 64, 128, 256, 512 px, transparent background. |
+| `png/banner.png` · `png/banner-light.png` | The logotype **with its background**, for a README or a page whose theme you do not control. |
 
-Les PNG de moins de 128 px sont rendus depuis l'icône, les autres
-depuis le logo complet. La bascule est à 128 et pas plus bas : à 64 et
-96 px, le grain et les paillettes du dessin complet ne font plus que du
-bruit et la fente bave — le rendu y serait moins lisible qu'à 48 px.
+PNGs under 128 px are rendered from the icon, the rest from the full
+logo. The switch is at 128 and no lower: at 64 and 96 px the grain and
+the spangles of the full drawing are nothing but noise and the seam
+bleeds — the result there would be less legible than the icon at 48 px.
 
-Pour tout reconstruire : `sh ../outils/construire.sh`.
+To rebuild everything: `sh ../tools/build.sh`.
 
-**Les fichiers livrés sont déjà optimisés** — inutile de les repasser
-dans un compresseur. Les SVG sont passés par svgo, les PNG par
-pngquant puis oxipng : 226 Ko → 79 Ko pour le jeu complet, sans
-différence visible.
+**The delivered files are already optimised** — there is no need to run
+them through a compressor again. The SVGs went through svgo, the PNGs
+through pngquant then oxipng: 591 kB → 206 kB for the whole set, with no
+visible difference (worst case 1.07 out of 255, root mean square).
+
+## Which ground
+
+This is the one choice you have to get right, and it is not a matter of
+taste — on the wrong ground the mark loses its outline.
+
+**Use the dark files on a dark background**, between about `#0A0E18` and
+`#1E2534`. Reference: `#0F1522`.
+
+**Use the light files on a light background**, from `#FFFFFF` down to
+about `#E6E9ED` — GitHub in light theme, Breeze Light (`#EFF0F1`), a
+white page, a printed sheet. Reference: `#FFFFFF`.
+
+Why it matters, measured on the rendered pixels rather than assumed. The
+drawing is lit from the top left, and on a dark ground the keenest facet
+blows out to near-white (`#DBEBFF`). Against white that edge is 1.21:1 —
+invisible. Put the dark files on a white page and **about 40% of the
+contour falls below 3:1**; the top-left edges dissolve and the shape
+opens up.
+
+The light palette pushes the whole value scale below the page instead:
+deep navy in shadow, mid blue in the light. On white, **none** of its
+contour falls below 3:1 (lowest 3.47:1, median 7.5:1). On Breeze Light
+the keen edge still holds at 3.04:1.
+
+The asymmetry is worth knowing. On a dark ground the contour is carried
+by the bright lit edge, and the deepest facet is *meant* to sink into the
+background. On a light ground it is the mass itself that carries the
+contour, and the lit edge is simply the palest part of the stone — never
+paler than the page. That is why neither variant survives on the other's
+ground, and why there are two.
+
+If you genuinely cannot know the background, use `png/banner.png` or
+`png/banner-light.png`, which carry their own. In HTML and in a GitHub
+README you can serve both and let the reader's theme choose:
+
+```html
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="png/banner.png">
+  <source media="(prefers-color-scheme: light)" srcset="png/banner-light.png">
+  <img alt="Kyanite" src="png/banner.png">
+</picture>
+```
 
 ## Palette
 
-Le logo est **réglé pour fond sombre**. Fond de référence : `#0F1522`.
+If you only need a few values:
 
-L'essentiel, si vous n'avez besoin que de quelques valeurs :
+| role | dark ground | light ground |
+|---|---|---|
+| reference background | `#0F1522` | `#FFFFFF` |
+| kyanite blue, core | `#3668C1` | `#214887` |
+| kyanite blue, pale | `#5793E4` | `#3A6DBE` |
+| lit edge | `#DBEBFF` | `#4E8BDC` |
+| hollow, shadow | `#112A58` | `#07122A` |
+| the word, in the logotype | `#DCE6F2` | `#16253D` |
 
-| rôle | hex |
-|---|---|
-| fond de référence | `#0F1522` |
-| bleu kyanite, cœur | `#3668C1` |
-| bleu kyanite, clair | `#5793E4` |
-| arête éclairée | `#DBEBFF` |
-| creux, ombre | `#112A58` |
-| le mot, dans le logotype | `#DCE6F2` |
+The full palette:
 
-La palette complète :
+| series | dark ground | light ground |
+|---|---|---|
+| the rock, 9 values | `#15306A` `#1B3B7C` `#21468E` `#2851A0` `#2E5CB1` `#3668C1` `#3F75CE` `#4A83DA` `#5793E4` | `#0B1C40` `#0F244E` `#132C5C` `#17356A` `#1C3E79` `#214887` `#285496` `#2F60A5` `#3A6DBE` |
+| the bevel, 5 values | `#112A58` `#1C4184` `#3A74C8` `#86B7F2` `#DBEBFF` | `#07122A` `#0F2350` `#23508F` `#3A74C8` `#4E8BDC` |
+| the filled seam | stone lip `#12305F` · resin `#9CC6F4` · core `#7FB3EE` · meniscus `#F2F8FF` · sheen `#C6DFFA` | stone lip `#091B3C` · resin `#7FAEE4` · core `#5E90D4` · meniscus `#DCE9FA` · sheen `#9CC0EC` |
+| bubbles in the resin | `#F7FBFF` `#285AA6` | `#EAF2FD` `#16305E` |
+| spangles | `#C6DEFA` `#A8CCF4` `#88B8F0` `#6AA0E8` `#4D86DA` | `#A8C8F0` `#8BB0E6` `#6E98DC` `#5480CE` `#3F6CC0` |
+| quartz, mica | `#86B6EE` `#A8CCF4` · `#1C3C76` `#22477F` | `#5E90D8` `#7BA8E4` · `#0A1835` `#0E1E42` |
+| fractures | `#1E4588` `#6CA2E8` | `#0D2048` `#3E72C4` |
+| planes passing through | pale `#BBD8F8` · dark `#0C2149` | pale `#A9C8EC` · dark `#06102A` |
 
-| série | valeurs |
-|---|---|
-| la roche, 9 valeurs | `#15306A` `#1B3B7C` `#21468E` `#2851A0` `#2E5CB1` `#3668C1` `#3F75CE` `#4A83DA` `#5793E4` |
-| le biseau, 5 valeurs | `#112A58` `#1C4184` `#3A74C8` `#86B7F2` `#DBEBFF` |
-| la fente comblée | lèvre de pierre `#12305F` · résine `#9CC6F4` · cœur `#7FB3EE` · ménisque `#F2F8FF` · reflet `#C6DFFA` |
-| bulles dans la résine | `#F7FBFF` `#285AA6` |
-| paillettes | `#C6DEFA` `#A8CCF4` `#88B8F0` `#6AA0E8` `#4D86DA` |
-| quartz, mica | `#86B6EE` `#A8CCF4` · `#1C3C76` `#22477F` |
-| fractures | `#1E4588` `#6CA2E8` |
-| plans traversants | clair `#BBD8F8` · sombre `#0C2149` |
+The icon flattens its tints — at 16 px, stacking opacities only gives
+mush:
 
-## Comment l'employer
+| role | dark ground | light ground |
+|---|---|---|
+| stem, lit · shadow | `#3A74CA` · `#234C92` | `#255494` · `#122C57` |
+| upper arm, lit · shadow | `#74ABEE` · `#4280D6` | `#4E8BDC` · `#2A5FA8` |
+| lower arm, lit · shadow | `#4D8ADA` · `#2E60B4` | `#336FC0` · `#1C4480` |
+| seam: stone lip · body · meniscus | `#163A74` · `#7CA6E0` · `#EAF4FF` | `#0E2448` · `#5E8ECE` · `#CFE2F8` |
 
-**Marge.** Laissez autour du symbole un vide d'au moins **un quart de sa
-hauteur**, libre de tout texte, trait ou bord. Les SVG portent déjà une
-marge interne d'environ 10 % : elle ne compte pas dans ce quart.
+## How to use it
 
-**Fond.** Un fond sombre et uni, entre `#0A0E18` et `#1E2534` environ.
-Au-delà, le contraste s'effondre : la moitié droite du jambage se
-confond avec le fond.
+**Clear space.** Leave at least **a quarter of its height** around the
+symbol, free of text, rules and edges. The SVGs already carry about 10%
+internal margin: that does not count towards the quarter.
 
-**Attention au fond clair.** Les PNG ont un fond transparent : posés
-sur du blanc, l'arête éclairée du haut-gauche (`#DBEBFF`) disparaît et
-le contour s'ouvre. C'est le cas d'un README GitHub lu en thème clair.
-Dans ce cas, servez `png/banniere.png`, qui porte son fond, ou posez le
-logo sur un aplat sombre vous-même.
+**Minimum sizes.** 16 px for the icon. 120 px wide for the logotype —
+below that the word goes illegible well before the symbol does.
 
-**Tailles minimales.** 16 px pour l'icône. 120 px de large pour le
-logotype — en dessous, le mot devient illisible bien avant le symbole.
+**Switch.** Under 64 px, use `kyanite-icon.svg`. Above, `kyanite-logo.svg`.
 
-**Bascule.** Sous 64 px, servez `kyanite-icon.svg`. Au-dessus,
-`kyanite-logo.svg`.
+## What not to do
 
-## Ce qu'il ne faut pas faire
-
-- **Ne pas le poser sur fond clair.** Il n'a pas été dessiné pour ça et
-  il n'existe pas de variante claire. Si vous en avez besoin, demandez
-  plutôt qu'improviser.
-- **Ne pas le recolorer.** La lumière vient du haut-gauche et les
-  valeurs sont calculées à partir de l'orientation de chaque pan.
-  Changer la teinte casse cette cohérence.
-- **Ne pas le faire tourner ni le refléter.** Même raison : la lumière
-  viendrait d'ailleurs.
-- **Ne pas l'étirer.** Les proportions sont réglées pour le carré.
-- **Ne pas y ajouter d'ombre portée, de lueur, de contour ni de relief.**
-  Le relief est déjà dans le dessin.
-- **Ne pas le rogner** dans un cercle ou un carré arrondi : le pied et
-  les tranchants seraient coupés. Posez-le dans la forme, avec sa marge.
-- **Ne pas se servir du symbole comme d'une lettre** dans un mot ou un
-  titre.
-- **Ne pas redessiner le mot** dans une autre police : utilisez
+- **Do not put a variant on the wrong ground.** This is the one that
+  actually breaks the mark; see [Which ground](#which-ground) above.
+- **Do not recolour it.** The light comes from the top left and the
+  values are computed from the orientation of each facet. Changing the
+  hue breaks that coherence. If you need another ground, ask rather than
+  improvise — the two palettes here were built by moving the whole value
+  scale, not by tinting.
+- **Do not rotate or mirror it.** Same reason: the light would come from
+  somewhere else.
+- **Do not stretch it.** The proportions are set for the square.
+- **Do not add a drop shadow, a glow, an outline or a relief.** The
+  relief is already in the drawing.
+- **Do not crop it** into a circle or a rounded square: the foot and the
+  blade edges would be cut. Place it inside the shape, with its margin.
+- **Do not use the symbol as a letter** in a word or a title.
+- **Do not redraw the word** in another typeface: use
   `kyanite-logotype.svg`.
 
-## Nom et logo
+## Name and logo
 
-Le code de Kyanite est sous licence libre. **Le nom « Kyanite » et ce
-logo ne le sont pas** : ils désignent le projet et restent réservés à
-son usage.
+Kyanite's code is free software. **The name "Kyanite" and this logo are
+not**: they identify the project and stay reserved for its use.
 
-Vous pouvez les reproduire pour parler de Kyanite — un article, une
-présentation, une page de liens, un dépôt de paquets. Vous ne pouvez
-pas vous en servir pour nommer ou signer une image dérivée, un produit
-ou un service, ni laisser entendre que le projet vous soutient.
-Reconstruisez une image à partir du code autant que vous voulez, mais
-donnez-lui son propre nom et sa propre marque.
+You may reproduce them to talk about Kyanite — an article, a talk, a page
+of links, a package repository. You may not use them to name or sign a
+derived image, a product or a service, nor to suggest that the project
+endorses you. Rebuild an image from the code as much as you like, but
+give it its own name and its own mark.
 
-Pour un usage qui sort de ce cadre, demandez.
+The full terms are in [`LICENSE`](../LICENSE). For anything outside them,
+ask.
 
-## Deux points techniques
+## Two technical points
 
-Le mot du logotype est composé en **Inter SemiBold puis vectorisé** :
-aucune police n'est requise à l'affichage. Inter est sous licence SIL
-Open Font License, qui autorise explicitement les travaux dérivés.
+The word in the logotype is set in **Inter SemiBold and converted to
+outlines**: no font is required to display it. Inter is under the SIL
+Open Font License, which explicitly permits derivative works.
 
-Les trois SVG n'emploient que des **polygones** : aucun filtre, aucune
-image bitmap, aucun dégradé. Les seules fonctions SVG employées au-delà
-des formes sont `clipPath` et `fill-opacity`, toutes deux universelles.
-C'est délibéré : un `feTurbulence` ou un dégradé rend mal, voire pas du
-tout, dans les thèmes d'icônes et les conversions automatiques.
+The six SVGs use **polygons only**: no filter, no bitmap, no gradient.
+The only SVG features used beyond shapes are `clipPath` and
+`fill-opacity`, both universal. That is deliberate: a `feTurbulence` or a
+gradient renders badly, or not at all, in icon themes and automatic
+conversions.
 
-Le logo ne ressemble volontairement ni au « f » de Fedora ni à
-l'engrenage de KDE, qui sont des marques déposées.
+The logo deliberately resembles neither Fedora's "f" nor KDE's gear,
+which are registered trademarks.
