@@ -1,4 +1,4 @@
-# Esquisses — tour 4. Variante K retenue, enrichie.
+# Le K de Kyanite — état au tour 5
 
 Fond sombre dans tous les cas.
 
@@ -39,6 +39,10 @@ Par-dessus, des **fractures** brisées en travers du clivage.
 
 ## Les deux ajouts de ce tour
 
+**La fente** n'est pas blanche : c'est la même pierre, mais à l'ombre.
+Une rainure en V éclairée du haut-gauche — le creux est dans le noir,
+la paroi aval reçoit la lumière, et la lèvre amont porte un filet clair.
+
 **Paillettes.** De petits éclats anguleux et des losanges semés le long
 de la crevasse, serrés vers la lèvre éclairée. Aucune forme en étoile.
 
@@ -51,10 +55,27 @@ traverse la masse.
 L'opacité est l'attribut SVG `fill-opacity`, **pas un filtre** : le rendu
 reste identique partout, y compris en icône système.
 
-## Dosage
+## Finesse : quatre échelles qui se recouvrent
 
-Trois réglages du même dessin : `K1` discret, `K2` moyen, `K3` marqué.
-Seules changent l'opacité des plans et la taille des paillettes.
+Pour qu'on ne lise plus les formes de base, aucune des quatre n'a de
+contour rectiligne :
+
+1. **Les lames** de kyanite, brisées en six segments avec une dérive
+   perpendiculaire à chaque nœud. Deux lames voisines partagent
+   exactement la même brisure : elles pavent la bande sans jour.
+2. **Les lamelles**, courtes et fines, prises entre les grandes. Ce sont
+   des éclats, pas des traits qui traversent.
+3. **Le grain** granitique, à trois tailles, densité inégale.
+4. **Les fractures**, en travers du clivage, toutes de longueur,
+   largeur et contraste différents. Une sur trois ne prend pas la
+   lumière.
+
+Le biseau est double : une arête vive étroite (0,8) qui s'écarte de son
+pan — plus sombre à l'ombre, plus vive au jour — puis le pan principal.
+
+Dosage retenu : `K3 — fond de mine`, plans translucides à 1,55 et
+paillettes à 1,30. Les deux molettes sont en bas de
+`outils/dessine.py`.
 
 ## Palette (fond `#0F1522`)
 
@@ -64,8 +85,8 @@ Seules changent l'opacité des plans et la taille des paillettes.
 | biseau, 5 valeurs | `#112A58` `#1C4184` `#3A74C8` `#86B7F2` `#DBEBFF` |
 | mica | `#1C3C76` `#22477F` |
 | quartz | `#86B6EE` `#A8CCF4` |
-| filon | cœur `#DCEBFE`, halo `#9DC4F3`, paroi `#122C5E` |
-| paillettes | `#FFFFFF` `#F2F8FF` `#D8E9FD` `#A9CCF4` |
+| fente | creux `#12305F`, paroi aval `#2E60B0`, lèvre `#86B7F2` |
+| paillettes | `#C6DEFA` `#A8CCF4` `#88B8F0` `#6AA0E8` `#4D86DA` |
 | plans | clair `#BBD8F8`, sombre `#0C2149` |
 
 ## Contraintes tenues
@@ -81,4 +102,5 @@ Ils sont repliés en pointe.
 ## Reste à faire
 
 Une **version icône simplifiée** : sous 64 px le grain, les paillettes
-et les plans deviennent du bruit. Contour, biseau, filon, rien d'autre.
+et les plans deviennent du bruit. Contour, biseau, fente, rien d'autre.
+Puis les livrables : `logo/`, les exports PNG, le README.
