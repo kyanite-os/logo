@@ -94,7 +94,7 @@ def paillettes(seed, force, traces):
 n_, pts, OUTER = G.n_, G.pts, G.OUTER
 ramp, bev = G.ROCK_DEEP, G.BEVEL_HARD
 
-def build(title, dose_plans, force_paillettes, seed=81177):
+def build(title, dose_plans, force_paillettes, seed=81177, resine=None):
     def op(v): return f"{min(0.85, v * dose_plans):.3f}".rstrip("0").rstrip(".")
     L = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"',
          '     role="img" aria-label="Kyanite">',
@@ -138,12 +138,21 @@ def build(title, dose_plans, force_paillettes, seed=81177):
     for d, o, w, c, a in PLANS:
         L.append(f'      <polygon points="{pts(plan(d, o, w, rp))}" fill="{c}" fill-opacity="{op(a)}"/>')
     L.append('    </g>')
-    morceaux, traces = G.fente(seed + 23)
-    L += ['', "    <!-- la fente : creux a l'ombre, fond inegal, paroi aval",
-          "         eclairee par plages, filet intermittent sur la levre amont,",
-          "         eclats manquants, fissures secondaires -->", '    <g>']
-    for poly, c in morceaux:
-        L.append(f'      <polygon points="{pts(poly)}" fill="{c}"/>')
+    if resine is None:
+        morceaux, traces = G.fente(seed + 23)
+        L += ['', "    <!-- la fente : creux a l'ombre, fond inegal, paroi aval",
+              "         eclairee par plages, filet intermittent sur la levre amont,",
+              "         eclats manquants, fissures secondaires -->", '    <g>']
+        for poly, c in morceaux:
+            L.append(f'      <polygon points="{pts(poly)}" fill="{c}"/>')
+    else:
+        morceaux, traces = G.resine(seed + 23, resine)
+        L += ['', "    <!-- la fente comblee : levre de pierre dessous, resine",
+              "         translucide, menisque continu sur la levre amont,",
+              "         bulles prises dans la masse -->", '    <g>']
+        for poly, c, a in morceaux:
+            o = f"{a:.2f}".rstrip("0").rstrip(".")
+            L.append(f'      <polygon points="{pts(poly)}" fill="{c}" fill-opacity="{o}"/>')
     L.append('    </g>')
     L += ['', '    <!-- paillettes : les eclats pris dans la crevasse -->', '    <g>']
     for poly, c in paillettes(seed + 7, force_paillettes, traces):
@@ -166,11 +175,11 @@ def build(title, dose_plans, force_paillettes, seed=81177):
 
 # Deux molettes : l'opacite des plans traversants, la taille des paillettes.
 VARIANTS = [
-    ("kyanite-logo", "K", 1.55, 1.30),
+    ("kyanite-logo", "K", 1.55, 1.30, None),
 ]
 if __name__ == "__main__":
     os.makedirs(OUT, exist_ok=True)
-    for slug, title, dp, fp in VARIANTS:
+    for slug, title, dp, fp, res in VARIANTS:
         p = os.path.join(OUT, slug + ".svg")
-        open(p, "w").write(build(title, dp, fp))
+        open(p, "w").write(build(title, dp, fp, resine=res))
         print(f"ecrit {slug}  {os.path.getsize(p)//1024} Ko")

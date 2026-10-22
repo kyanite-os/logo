@@ -557,6 +557,93 @@ def fente(seed):
                 out.append((ribbon2(br, [-x * 0.3 for x in ws_], h), SEAM["aval"]))
     return out, traces
 
+# ------------------------------------------------------------- la resine
+# Variante : la fente n'est pas un vide, elle est COMBLEE. Une resine
+# — en mineralogie, un filon secondaire qui colmate la fracture.
+#
+# Ce qui fait lire « rempli » plutot que « casse », c'est la continuite :
+# un menisque lisse et ininterrompu le long de la levre amont, des bords
+# nets et paralleles, aucun eclat manquant. La matiere est translucide,
+# donc le grain de la pierre transparait au travers — d'ou fill-opacity
+# plutot qu'un aplat.
+#
+# Deux dosages : laiteuse (on voit tout de suite que c'est rempli) ou
+# transparente (plus minerale, plus discrete).
+RESINE_CLAIRE = {
+    "levre_pierre": ("#14346C", 0.55),   # l'ancienne arete de cassure, dessous
+    "corps":        ("#A8CEF6", 0.62),   # la resine elle-meme
+    "coeur":        ("#86B8F0", 0.38),   # plus epaisse au milieu
+    "menisque":     ("#EAF4FF", 0.95),   # le bourrelet qui prend la lumiere
+    "reflet":       ("#CBE2FB", 0.34),   # retour de lumiere sur l'autre bord
+    "bulle_claire": ("#F2F8FF", 0.9),
+    "bulle_sombre": ("#2A5BA8", 0.55),
+}
+RESINE_SOMBRE = {
+    "levre_pierre": ("#12305F", 0.6),
+    "corps":        ("#2B5EAE", 0.72),
+    "coeur":        ("#1C4080", 0.45),
+    "menisque":     ("#CFE4FC", 0.92),
+    "reflet":       ("#6CA2E8", 0.3),
+    "bulle_claire": ("#DCEBFE", 0.85),
+    "bulle_sombre": ("#13336A", 0.6),
+}
+
+def resine(seed, teintes):
+    """Les morceaux du filon comble. Renvoie (polygone, teinte, opacite)."""
+    rnd = random.Random(seed)
+    out, traces = [], []
+    T = teintes
+    for ps, ws in ((VEIN_STEM, W_STEM), (VEIN_ARM, W_ARM)):
+        # Moins de derive que pour une cassure ouverte : la resine epouse
+        # la fracture mais sa surface, elle, est lisse.
+        P, W = densifie(ps, ws, 1.7, 0.26, rnd)
+        n = len(P)
+        bg, bd = bruit(n, rnd, 0.2), bruit(n, rnd, 0.2)
+        g = [max(0.0, W[i] * (1.0 + bg[i]) * 0.94) for i in range(n)]
+        d = [max(0.0, W[i] * (1.0 + bd[i]) * 0.94) for i in range(n)]
+        traces.append((P, W, g, d))
+
+        # la levre de pierre, sous la resine : la fracture reste lisible
+        out.append((ribbon2(P, [x * 1.2 for x in g], [x * 1.2 for x in d]),) + T["levre_pierre"])
+        # le corps, translucide : le grain transparait
+        out.append((ribbon2(P, g, d),) + T["corps"])
+        # plus epaisse au milieu du chenal
+        out.append((ribbon2(P, [x * 0.52 for x in g], [x * 0.52 for x in d]),) + T["coeur"])
+        # le menisque : continu, c'est lui qui dit « rempli »
+        out.append((ribbon2(P, [x * 1.02 for x in g], [-x * 0.66 for x in g]),) + T["menisque"])
+        # retour de lumiere sur le bord aval
+        out.append((ribbon2(P, [-x * 0.5 for x in d], [x * 0.98 for x in d]),) + T["reflet"])
+        # bulles prises dans la resine
+        for _ in range(int(n * 0.55)):
+            i = rnd.randrange(n)
+            if W[i] < 0.35:
+                continue
+            u = unit(sub(P[min(i + 1, n - 1)], P[max(i - 1, 0)])); nn = (-u[1], u[0])
+            o = rnd.uniform(-g[i] * 0.6, d[i] * 0.6)
+            r = rnd.uniform(0.1, 0.3) * (0.5 + W[i])
+            cle = "bulle_claire" if rnd.random() < 0.62 else "bulle_sombre"
+            out.append((fleck(rnd, P[i][0] + nn[0] * o + u[0] * rnd.uniform(-0.6, 0.6),
+                              P[i][1] + nn[1] * o + u[1] * rnd.uniform(-0.6, 0.6), r),) + T[cle])
+        # fissures secondaires, comblees elles aussi
+        for _ in range(4):
+            i = rnd.randrange(2, n - 2)
+            u = unit(sub(P[i + 1], P[i - 1])); nn = (-u[1], u[0])
+            sens = rnd.choice((1.0, -1.0))
+            L = rnd.uniform(3.5, 10.0)
+            dirn = unit((nn[0] * sens + u[0] * rnd.uniform(-0.7, 0.7),
+                         nn[1] * sens + u[1] * rnd.uniform(-0.7, 0.7)))
+            br = [P[i]]
+            for j in range(1, 5):
+                t = j / 4
+                o = rnd.uniform(-0.35, 0.35)
+                br.append((P[i][0] + dirn[0] * L * t - dirn[1] * o,
+                           P[i][1] + dirn[1] * L * t + dirn[0] * o))
+            w0 = min(0.4, W[i] * 0.42)
+            ws_ = [w0 * (1 - j / 4) ** 0.7 for j in range(5)]
+            out.append((ribbon2(br, ws_, ws_),) + T["corps"])
+            out.append((ribbon2(br, [x * 0.9 for x in ws_], [-x * 0.4 for x in ws_]),) + T["menisque"])
+    return out, traces
+
 # ------------------------------------------------------------------- sortie
 def n_(v):
     s = f"{v:.1f}".rstrip("0").rstrip("."); return s if s else "0"
