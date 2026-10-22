@@ -181,12 +181,28 @@ and takes the bevel from 3 to 5.
 | silhouette | yes | yes | yes |
 | contrast between the three strokes | yes | yes | yes |
 | lit edge at the top left | yes, dominant | yes | yes |
-| the seam | **no** | muted line | yes |
+| the seam | **does not read** | muted line | yes |
 
-At 16 px the seam has gone: all that is left is the silhouette, the
-contrast between the strokes, and a pale edge pulling the eye towards the
-top-left corner. That is the order in which the icon has to be thought
-about.
+That last row used to say plainly **no**, and "measured rather than
+assumed" had not been applied to it. It is wrong: the seam is not absent
+at 16 px. Render the icon twice, with and without the `seam` group, and
+compare pixel by pixel:
+
+| | 16 px | 22 px | 24 px | 32 px | 48 px |
+|---|---|---|---|---|---|
+| pixels touched | 26 / 256 | 43 / 484 | 48 / 576 | 74 / 1024 | 141 / 2304 |
+| | 10.2% | 8.9% | 8.3% | 7.2% | 6.1% |
+| largest difference | 47 / 255 | 74 | 79 | 94 | 127 |
+
+The light icon measures the same to within one pixel.
+
+So the seam is drawn at 16 px, and it costs almost nothing to draw.
+What it does not do there is *read* as a vein: all the eye is left with
+is the silhouette, the contrast between the strokes, and a pale edge
+pulling towards the top-left corner. That is the order in which the icon
+has to be thought about — and the distinction matters when tuning it.
+There is nothing to reclaim by cutting the seam at that size; there is
+only no point counting on it.
 
 ## A gap between this journal and the code
 
