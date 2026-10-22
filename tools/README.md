@@ -27,15 +27,11 @@ sh build.sh        # rebuilds the six SVGs and the twenty PNGs
 ## The two grounds
 
 The geometry is shared; only the values change. A theme is a plain dict
-at the bottom of `block.py` — `ON_DARK` and `ON_LIGHT` — holding every
-tint the drawing needs, and each generator takes one and writes the
-matching file.
-
-Adding a third ground means writing a third dict, not touching any of the
-drawing code. `check_ground()` will tell you straight away if its keen
-edge is too pale to hold the contour against its own background; see the
-*two grounds* section in [`../NOTES.md`](../NOTES.md#the-two-grounds) for
-why that is the value that matters.
+at the bottom of `block.py` — `ON_DARK` and `ON_LIGHT` — and a third
+ground would be a third dict, not a change to any drawing code.
+`check_ground()` says straight away if its keen edge is too pale to hold
+the contour; [`../NOTES.md`](../NOTES.md#the-two-grounds) says why that
+is the value that matters.
 
 ## The two knobs
 
@@ -45,19 +41,16 @@ serves both grounds.
 
 ## PNG optimisation
 
-`optimize.py` reproduces the squoosh.app chain, with the same two
-engines: **pngquant** (libimagequant) to cut the palette down, then
-**oxipng** with zopfli to recompress losslessly.
-
-For each file it tries both routes — lossless alone, and palette then
-lossless — measures the deviation from the original, and keeps the
-smaller of the two as long as the deviation stays under the limit. The
+`optimize.py` reproduces the squoosh.app chain: **pngquant** to cut the
+palette down, then **oxipng** with zopfli to recompress losslessly. It
+tries both routes — lossless alone, and palette then lossless — and keeps
+the smaller as long as the deviation stays under the limit. That
 deviation is measured on **premultiplied** channels: on an image with a
 transparent background, comparing the raw RGB of an invisible pixel means
 nothing.
 
-Result on the delivered set: 591 kB → 206 kB, that is −65%, for a root
-mean square deviation of at most 1.07 out of 255.
+On the delivered set: 591 kB → 206 kB, −65%, for a root mean square
+deviation of at most 1.07 out of 255.
 
 ## Dependencies
 
