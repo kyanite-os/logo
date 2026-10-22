@@ -22,8 +22,8 @@ Chaque pan du biseau prend sa valeur de l'orientation de son arête sous
   seulement : le contre-poinçon du bas fait 19 unités de haut contre 11
   auparavant. Sans ça la branche basse et le jambage se lisaient comme
   une seule masse.
-- Épaisseurs : jambage 24, branche haute 20,8, branche basse 19,5.
-  Le biseau est descendu à 3 pour laisser respirer les encoches.
+- Épaisseurs : jambage 30, branche haute 22,6, branche basse 21,2.
+  Le biseau est à 3, pour laisser respirer les encoches.
 - **Le sommet et le pied du jambage ne sont pas de même nature** :
   en haut une seule coupe oblique franche, d'un seul geste ; en bas un
   angle droit franc à gauche — sans aucune coupe, le flanc reste
@@ -122,9 +122,19 @@ Ils sont repliés en pointe.
 
 ## La version icône
 
-Sous 64 px, le grain, les paillettes et les plans ne font plus que du
-bruit. `kyanite-icon.svg` ne garde que les trois choses qui survivent à
-16 px : la silhouette, le contraste entre les trois traits, et la
-fente. Son contour est allégé des décrochements, invisibles à cette
-taille et coûteux en sommets. Le biseau y passe de 3 à 5, pour qu'il
-pèse encore un demi-pixel à 16 px.
+Sous 128 px, le grain, les paillettes et les plans ne font plus que du
+bruit. `kyanite-icon.svg` les retire, allège le contour de ses
+décrochements, et porte le biseau de 3 à 5.
+
+**Ce qui survit, mesuré et non supposé :**
+
+| | 16 px | 22–32 px | 48–128 px |
+|---|---|---|---|
+| silhouette | oui | oui | oui |
+| contraste entre les trois traits | oui | oui | oui |
+| arête éclairée en haut-gauche | oui, dominante | oui | oui |
+| fente | **non** | ligne sourde | oui |
+
+À 16 px la fente a disparu : il ne reste que la silhouette, le
+contraste des traits, et une arête claire qui tire l'œil vers le coin
+haut-gauche. C'est l'ordre dans lequel il faut penser l'icône.

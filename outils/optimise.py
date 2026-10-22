@@ -77,8 +77,10 @@ def traite(chemin):
     return avant, apres, voie, eqm
 
 if __name__ == "__main__":
-    fichiers = sorted((f for f in os.listdir(PNG) if f.endswith(".png")),
-                      key=lambda f: int(f.rsplit("-", 1)[1][:-4]))
+    def rang(f):
+        tete, _, queue = f[:-4].rpartition("-")
+        return (0, int(queue)) if queue.isdigit() else (1, 0)
+    fichiers = sorted((f for f in os.listdir(PNG) if f.endswith(".png")), key=rang)
     ta = tb = 0
     print(f"{'fichier':<22}{'avant':>9}{'après':>9}{'gain':>7}   voie")
     for f in fichiers:

@@ -2,7 +2,7 @@
 
 Un K taillé dans un bloc de kyanite, pour fond sombre.
 
-![Le logotype Kyanite](png/kyanite-256.png)
+![Le logotype Kyanite](png/banniere.png)
 
 ## Les fichiers
 
@@ -12,10 +12,12 @@ Un K taillé dans un bloc de kyanite, pour fond sombre.
 | `kyanite-icon.svg` | La version simplifiée, pour **moins de 64 px** : icône système, favicon, barre des tâches. |
 | `kyanite-logotype.svg` | Le symbole suivi du mot « Kyanite ». |
 | `png/kyanite-<taille>.png` | 16, 22, 24, 32, 48, 64, 128, 256, 512 px, fond transparent. |
+| `png/banniere.png` | Le logotype **avec son fond sombre**, pour un README ou une page dont on ne maîtrise pas le thème. |
 
-Les PNG de moins de 64 px sont rendus depuis l'icône, les autres depuis
-le logo complet. C'est voulu : le dessin complet se brouille en petit,
-et l'icône est trop nue en grand.
+Les PNG de moins de 128 px sont rendus depuis l'icône, les autres
+depuis le logo complet. La bascule est à 128 et pas plus bas : à 64 et
+96 px, le grain et les paillettes du dessin complet ne font plus que du
+bruit et la fente bave — le rendu y serait moins lisible qu'à 48 px.
 
 Pour tout reconstruire : `sh ../outils/construire.sh`.
 
@@ -60,6 +62,12 @@ marge interne d'environ 10 % : elle ne compte pas dans ce quart.
 **Fond.** Un fond sombre et uni, entre `#0A0E18` et `#1E2534` environ.
 Au-delà, le contraste s'effondre : la moitié droite du jambage se
 confond avec le fond.
+
+**Attention au fond clair.** Les PNG ont un fond transparent : posés
+sur du blanc, l'arête éclairée du haut-gauche (`#DBEBFF`) disparaît et
+le contour s'ouvre. C'est le cas d'un README GitHub lu en thème clair.
+Dans ce cas, servez `png/banniere.png`, qui porte son fond, ou posez le
+logo sur un aplat sombre vous-même.
 
 **Tailles minimales.** 16 px pour l'icône. 120 px de large pour le
 logotype — en dessous, le mot devient illisible bien avant le symbole.
