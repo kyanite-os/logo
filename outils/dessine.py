@@ -19,7 +19,7 @@ import math, os, random, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import bloc as G
 
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "logo")
 
 GLINT = ["#C6DEFA", "#A8CCF4", "#88B8F0", "#6AA0E8", "#4D86DA"]
 CLEAR = "#BBD8F8"      # plan translucide clair
@@ -166,7 +166,7 @@ def build(title, dose_plans, force_paillettes, seed=81177):
 
 # Deux molettes : l'opacite des plans traversants, la taille des paillettes.
 VARIANTS = [
-    ("kyanite-k", "K — fond de mine", 1.55, 1.30),
+    ("kyanite-logo", "K", 1.55, 1.30),
 ]
 if __name__ == "__main__":
     os.makedirs(OUT, exist_ok=True)

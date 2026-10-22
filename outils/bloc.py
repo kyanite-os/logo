@@ -15,7 +15,7 @@ Polygones uniquement : aucun filtre, aucun bitmap, aucun degrade.
 """
 import math, os, random
 
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "logo")
 LIGHT = (-math.sqrt(0.5), -math.sqrt(0.5))
 
 # ------------------------------------------------------------------ palette

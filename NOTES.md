@@ -1,4 +1,8 @@
-# Le K de Kyanite — état au tour 5
+# Journal de conception du logo
+
+Ce fichier garde les raisons derrière le dessin. Pour s'en servir, voir
+[`logo/README.md`](logo/README.md) ; pour le reconstruire, voir
+[`outils/README.md`](outils/README.md).
 
 Fond sombre dans tous les cas.
 
@@ -116,8 +120,11 @@ retourne : sur une arête plus courte que le biseau, les deux pans
 voisins se refermeraient l'un sur l'autre et fabriqueraient une dent.
 Ils sont repliés en pointe.
 
-## Reste à faire
+## La version icône
 
-Une **version icône simplifiée** : sous 64 px le grain, les paillettes
-et les plans deviennent du bruit. Contour, biseau, fente, rien d'autre.
-Puis les livrables : `logo/`, les exports PNG, le README.
+Sous 64 px, le grain, les paillettes et les plans ne font plus que du
+bruit. `kyanite-icon.svg` ne garde que les trois choses qui survivent à
+16 px : la silhouette, le contraste entre les trois traits, et la
+fente. Son contour est allégé des décrochements, invisibles à cette
+taille et coûteux en sommets. Le biseau y passe de 3 à 5, pour qu'il
+pèse encore un demi-pixel à 16 px.
