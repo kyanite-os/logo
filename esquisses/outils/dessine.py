@@ -63,31 +63,28 @@ def losange(cx, cy, r, rot, ap=0.45):
              cy + math.sin(rot + i * math.pi / 2) * (r if i % 2 == 0 else r * ap))
             for i in range(4)]
 
-def paillettes(seed, force):
-    """Semees le long du filon, serrees vers la levre eclairee."""
+def paillettes(seed, force, traces):
+    """Semees le long de la crevasse, serrees vers la levre eclairee."""
     rnd = random.Random(seed)
     out = []
-    for path, ws in ((G.VEIN_STEM, G.W_STEM), (G.VEIN_ARM, G.W_ARM)):
-        for i in range(len(path) - 1):
-            p0, p1 = path[i], path[i + 1]
-            seg = (p1[0] - p0[0], p1[1] - p0[1])
-            L = math.hypot(*seg)
-            u = G.unit(seg); nn = (-u[1], u[0])
-            k = max(3, int(L / 1.25))
-            for j in range(k):
-                t = (j + rnd.uniform(0.05, 0.95)) / k
-                w = ws[i] + (ws[i + 1] - ws[i]) * t
-                if w < 0.28:
-                    continue
-                off = 0.42 * w + rnd.uniform(-0.95, 0.95) * w   # biais vers la levre claire
-                cx = p0[0] + seg[0] * t + nn[0] * off
-                cy = p0[1] + seg[1] * t + nn[1] * off
-                r = rnd.uniform(0.11, 0.34) * (0.5 + w) * force
-                rot = rnd.random() * math.pi
+    for P, W, g, d in traces:
+        n = len(P)
+        for i in range(n):
+            if W[i] < 0.3:
+                continue
+            u = G.unit(G.sub(P[min(i + 1, n - 1)], P[max(i - 1, 0)]))
+            nn = (-u[1], u[0])
+            for _ in range(rnd.randint(0, 3)):
+                off = rnd.uniform(-g[i] * 0.9, d[i] * 1.15)
+                le = rnd.uniform(-0.8, 0.8)
+                cx = P[i][0] + nn[0] * off + u[0] * le
+                cy = P[i][1] + nn[1] * off + u[1] * le
+                r = rnd.uniform(0.09, 0.3) * (0.5 + W[i]) * force
                 c = GLINT[min(4, int(rnd.random() * 5.4))]
                 out.append((G.fleck(rnd, cx, cy, r * 1.35) if rnd.random() < 0.45
-                            else losange(cx, cy, r, rot, rnd.uniform(0.28, 0.72)), c))
-    # quelques eclats isoles pris dans la roche, autour du filon
+                            else losange(cx, cy, r, rnd.random() * math.pi,
+                                         rnd.uniform(0.28, 0.72)), c))
+    # quelques eclats isoles pris dans la roche, autour de la fente
     for cx, cy in ((33.0, 25.0), (15.5, 46.0), (34.0, 62.0), (50.0, 36.0), (70.0, 26.0)):
         r = rnd.uniform(0.3, 0.55) * force
         out.append((losange(cx, cy, r, rnd.random() * math.pi, 0.4), GLINT[rnd.randint(2, 3)]))
@@ -141,13 +138,15 @@ def build(title, dose_plans, force_paillettes, seed=81177):
     for d, o, w, c, a in PLANS:
         L.append(f'      <polygon points="{pts(plan(d, o, w, rp))}" fill="{c}" fill-opacity="{op(a)}"/>')
     L.append('    </g>')
-    L += ['', "    <!-- la fente : creux a l'ombre, paroi aval eclairee, filet sur la levre -->"]
-    for seq, w in ((G.VEIN_STEM, G.W_STEM), (G.VEIN_ARM, G.W_ARM)):
-        L.append(f'    <polygon points="{pts(G.ribbon(seq, [x * 1.5 for x in w]))}" fill="{G.SEAM["creux"]}"/>')
-        L.append(f'    <polygon points="{pts(G.ribbon(seq, [x * 0.55 for x in w], 1.0))}" fill="{G.SEAM["aval"]}"/>')
-        L.append(f'    <polygon points="{pts(G.ribbon(seq, [x * 0.16 for x in w], -1.55))}" fill="{G.SEAM["levre"]}"/>')
+    morceaux, traces = G.fente(seed + 23)
+    L += ['', "    <!-- la fente : creux a l'ombre, fond inegal, paroi aval",
+          "         eclairee par plages, filet intermittent sur la levre amont,",
+          "         eclats manquants, fissures secondaires -->", '    <g>']
+    for poly, c in morceaux:
+        L.append(f'      <polygon points="{pts(poly)}" fill="{c}"/>')
+    L.append('    </g>')
     L += ['', '    <!-- paillettes : les eclats pris dans la crevasse -->', '    <g>']
-    for poly, c in paillettes(seed + 7, force_paillettes):
+    for poly, c in paillettes(seed + 7, force_paillettes, traces):
         L.append(f'      <polygon points="{pts(poly)}" fill="{c}"/>')
     L.append('    </g>')
     L += ['', '    <!-- deux plans passes par-dessus tout : la lumiere qui traverse -->']

@@ -29,7 +29,7 @@ MICA   = ["#1C3C76", "#22477F"]   # points sombres (biotite)
 QUARTZ = ["#86B6EE", "#A8CCF4"]   # eclats clairs (quartz)
 BEVEL      = ["#17376F", "#21488F", "#3A74C8", "#72ACEE", "#BEDCFA"]
 BEVEL_HARD = ["#112A58", "#1C4184", "#3A74C8", "#86B7F2", "#DBEBFF"]
-SEAM = {"creux": "#12305F", "aval": "#2E60B0", "levre": "#86B7F2"}
+SEAM = {"creux": "#15376E", "fond": "#0E2650", "aval": "#3570C4", "levre": "#8FBDF4"}
 FRACT = {"dark": "#1E4588", "light": "#6CA2E8"}
 
 # ---------------------------------------------------------------- geometrie
@@ -431,11 +431,132 @@ def fracture(ps, w, clair):
         r.append((ribbon(ps, [w] * len(ps), w * 0.8), FRACT["light"]))
     return r
 
-# ------------------------------------------------------------------ le filon
+# -------------------------------------------------------------- la fente
+# Une cassure n'a pas deux levres paralleles, ni une largeur reguliere,
+# ni un reflet continu. Tout ici est irregulier a la petite echelle :
+# le trace divague, chaque levre a sa propre derive, la largeur pince et
+# gonfle, le filet de lumiere est intermittent, et des eclats manquent
+# sur les bords.
 VEIN_STEM = [(17.0, 84.0), (23.0, 69.0), (19.0, 56.0), (25.0, 43.5), (21.0, 29.0), (23.5, 14.0)]
-VEIN_ARM = [(23.0, 45.0), (38.0, 40.0), (55.0, 31.0), (72.0, 21.0), (88.0, 12.5)]
-W_STEM = [0.0, 1.2, 0.9, 1.25, 0.8, 0.0]
-W_ARM = [1.25, 1.15, 1.0, 0.75, 0.0]
+VEIN_ARM  = [(25.0, 43.5), (39.0, 39.0), (54.0, 30.5), (68.0, 23.0), (81.0, 17.0)]
+W_STEM = [0.0, 1.45, 1.05, 1.5, 0.95, 0.0]
+W_ARM  = [1.5, 1.35, 1.2, 0.9, 0.0]
+
+def ribbon2(ps, gauche, droite):
+    """Ruban dont les deux levres sont independantes."""
+    n = len(ps)
+    nor = [(lambda u: (-u[1], u[0]))(unit(sub(ps[min(i + 1, n - 1)], ps[max(i - 1, 0)]))) for i in range(n)]
+    a = [(ps[i][0] + nor[i][0] * gauche[i], ps[i][1] + nor[i][1] * gauche[i]) for i in range(n)]
+    b = [(ps[i][0] - nor[i][0] * droite[i], ps[i][1] - nor[i][1] * droite[i]) for i in range(n)]
+    return a + b[::-1]
+
+def bruit(n, rnd, amp, lissage=4):
+    """Bruit lisse. Un bruit decorrele d'un point au suivant donne des
+    dents de scie ; une cassure, elle, derive lentement."""
+    v = [rnd.uniform(-1.0, 1.0) for _ in range(n)]
+    for _ in range(lissage):
+        v = [(v[max(i - 1, 0)] + 2.0 * v[i] + v[min(i + 1, n - 1)]) / 4.0 for i in range(n)]
+    m = max(1e-6, max(abs(x) for x in v))
+    return [x / m * amp for x in v]
+
+def densifie(ps, ws, pas, amp, rnd):
+    """Reechantillonne le trace et le fait divaguer. Renvoie les points
+    et la largeur de base interpolee en chacun d'eux."""
+    pts_, wid, nrm = [], [], []
+    for i in range(len(ps) - 1):
+        p0, p1 = ps[i], ps[i + 1]
+        d = sub(p1, p0)
+        L = math.hypot(*d)
+        k = max(1, int(L / pas))
+        u = unit(d); nn = (-u[1], u[0])
+        for j in range(k):
+            t = j / k
+            pts_.append((p0[0] + d[0] * t, p0[1] + d[1] * t))
+            nrm.append(nn)
+            wid.append(ws[i] + (ws[i + 1] - ws[i]) * t)
+    pts_.append(ps[-1]); nrm.append(nrm[-1]); wid.append(ws[-1])
+    o = bruit(len(pts_), rnd, amp)
+    pts_ = [(p[0] + n_[0] * o[i], p[1] + n_[1] * o[i])
+            for i, (p, n_) in enumerate(zip(pts_, nrm))]
+    return pts_, wid
+
+def _tronçons(n, rnd, lmin, lmax, gmin, gmax):
+    """Decoupe [0,n[ en morceaux separes par des trous : un reflet reel
+    n'est jamais continu."""
+    out, i = [], rnd.randint(0, gmax)
+    while i < n - 2:
+        j = min(n - 1, i + rnd.randint(lmin, lmax))
+        if j - i >= 2:
+            out.append(list(range(i, j + 1)))
+        i = j + rnd.randint(gmin, gmax)
+    return out
+
+def fente(seed):
+    """Tous les morceaux de la cassure, dans l'ordre de pose."""
+    rnd = random.Random(seed)
+    out = []
+    traces = []
+    for ps, ws in ((VEIN_STEM, W_STEM), (VEIN_ARM, W_ARM)):
+        P, W = densifie(ps, ws, 1.7, 0.32, rnd)
+        n = len(P)
+        # la largeur pince et gonfle, et les deux levres sont decorrelees
+        bg, bd = bruit(n, rnd, 0.42), bruit(n, rnd, 0.42)
+        g = [max(0.0, W[i] * (1.0 + bg[i]) * 0.92) for i in range(n)]
+        d = [max(0.0, W[i] * (1.0 + bd[i]) * 0.92) for i in range(n)]
+        traces.append((P, W, g, d))
+
+        out.append((ribbon2(P, g, d), SEAM["creux"]))
+        # le fond n'est pas uniforme : par endroits la cassure est plus
+        # profonde. Toujours sombre, jamais clair : c'est ce qui garde
+        # la continuite du trait.
+        for idx in _tronçons(n, rnd, 2, 6, 1, 4):
+            k = [max(0.0, g[i] * rnd.uniform(0.25, 0.6)) for i in idx]
+            l = [max(0.0, d[i] * rnd.uniform(0.25, 0.6)) for i in idx]
+            out.append((ribbon2([P[i] for i in idx], k, l), SEAM["fond"]))
+        # la paroi aval prend la lumiere, par plages. Elle reste du cote
+        # aval : le creux ne doit jamais etre recouvert de part en part.
+        for idx in _tronçons(n, rnd, 3, 9, 1, 3):
+            k = [d[i] * rnd.uniform(-0.45, -0.25) for i in idx]
+            l = [d[i] * rnd.uniform(0.8, 1.05) for i in idx]
+            out.append((ribbon2([P[i] for i in idx], k, l), SEAM["aval"]))
+        # le filet sur la levre amont : intermittent, et d'epaisseur variable
+        for idx in _tronçons(n, rnd, 2, 7, 1, 5):
+            k = [g[i] * rnd.uniform(1.0, 1.35) for i in idx]
+            l = [-g[i] * rnd.uniform(0.55, 0.85) for i in idx]
+            out.append((ribbon2([P[i] for i in idx], k, l), SEAM["levre"]))
+        # eclats manquants sur les levres
+        for _ in range(int(n * 0.11)):
+            i = rnd.randrange(n)
+            if W[i] < 0.5:
+                continue
+            u = unit(sub(P[min(i + 1, n - 1)], P[max(i - 1, 0)])); nn = (-u[1], u[0])
+            sens = rnd.choice((1.0, -1.0))
+            e = (g[i] if sens > 0 else -d[i]) * rnd.uniform(0.8, 1.3)
+            out.append((fleck(rnd, P[i][0] + nn[0] * e, P[i][1] + nn[1] * e,
+                              rnd.uniform(0.2, 0.48)),
+                        SEAM["creux"] if rnd.random() < 0.7 else SEAM["fond"]))
+        # fissures secondaires : de courts departs, qui s'eteignent
+        for _ in range(4):
+            i = rnd.randrange(2, n - 2)
+            u = unit(sub(P[i + 1], P[i - 1])); nn = (-u[1], u[0])
+            sens = rnd.choice((1.0, -1.0))
+            L = rnd.uniform(3.5, 11.0)
+            dirn = unit((nn[0] * sens + u[0] * rnd.uniform(-0.8, 0.8),
+                         nn[1] * sens + u[1] * rnd.uniform(-0.8, 0.8)))
+            br = [P[i]]
+            for j in range(1, 5):
+                t = j / 4
+                o = rnd.uniform(-0.5, 0.5)
+                br.append((P[i][0] + dirn[0] * L * t - dirn[1] * o,
+                           P[i][1] + dirn[1] * L * t + dirn[0] * o))
+            w0 = min(0.42, W[i] * 0.45)
+            ws_ = [w0 * (1 - j / 4) ** 0.7 for j in range(5)]
+            out.append((ribbon2(br, ws_, ws_), SEAM["creux"]))
+            if rnd.random() < 0.5:
+                h = [x * 0.45 for x in ws_]
+                out.append((ribbon2(br, [-x * 0.3 for x in ws_], h), SEAM["aval"]))
+    return out, traces
+
 # ------------------------------------------------------------------- sortie
 def n_(v):
     s = f"{v:.1f}".rstrip("0").rstrip("."); return s if s else "0"

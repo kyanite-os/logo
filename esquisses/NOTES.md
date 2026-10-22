@@ -41,7 +41,24 @@ Par-dessus, des **fractures** brisées en travers du clivage.
 
 **La fente** n'est pas blanche : c'est la même pierre, mais à l'ombre.
 Une rainure en V éclairée du haut-gauche — le creux est dans le noir,
-la paroi aval reçoit la lumière, et la lèvre amont porte un filet clair.
+la paroi aval reçoit la lumière, la lèvre amont porte un filet clair.
+
+Une cassure n'a ni deux lèvres parallèles, ni une largeur régulière,
+ni un reflet continu. Tout y est donc irrégulier à la petite échelle :
+
+- le tracé divague, et chaque lèvre dérive indépendamment de l'autre ;
+- la largeur pince et gonfle ;
+- le fond est plus profond par endroits — toujours sombre, jamais
+  clair : c'est ce qui garde la continuité du trait ;
+- la paroi aval ne prend la lumière que par plages, et reste de son
+  côté : le creux n'est jamais recouvert de part en part ;
+- le filet de la lèvre amont est intermittent ;
+- des éclats manquent sur les bords ;
+- quatre fissures secondaires partent du tracé et s'éteignent.
+
+Le bruit qui pilote tout cela est **lissé**. Un bruit décorrélé d'un
+point au suivant donnerait des dents de scie ; une cassure, elle,
+dérive lentement.
 
 **Paillettes.** De petits éclats anguleux et des losanges semés le long
 de la crevasse, serrés vers la lèvre éclairée. Aucune forme en étoile.
@@ -85,7 +102,7 @@ paillettes à 1,30. Les deux molettes sont en bas de
 | biseau, 5 valeurs | `#112A58` `#1C4184` `#3A74C8` `#86B7F2` `#DBEBFF` |
 | mica | `#1C3C76` `#22477F` |
 | quartz | `#86B6EE` `#A8CCF4` |
-| fente | creux `#12305F`, paroi aval `#2E60B0`, lèvre `#86B7F2` |
+| fente | creux `#15376E`, fond `#0E2650`, paroi aval `#3570C4`, lèvre `#8FBDF4` |
 | paillettes | `#C6DEFA` `#A8CCF4` `#88B8F0` `#6AA0E8` `#4D86DA` |
 | plans | clair `#BBD8F8`, sombre `#0C2149` |
 
