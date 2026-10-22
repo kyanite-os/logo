@@ -150,8 +150,24 @@ décrochements, et porte le biseau de 3 à 5.
 | silhouette | oui | oui | oui |
 | contraste entre les trois traits | oui | oui | oui |
 | arête éclairée en haut-gauche | oui, dominante | oui | oui |
-| fente | **non** | ligne sourde | oui |
+| fente | **ne se lit pas** | ligne sourde | oui |
 
-À 16 px la fente a disparu : il ne reste que la silhouette, le
+À 16 px la fente ne se lit plus comme un filon. Elle n'a pas pour
+autant disparu du rendu : en rendant l'icône deux fois, avec et sans
+le groupe `fente`, 18 pixels sur 256 changent, avec un écart maximal
+de 47 sur 255. Assez pour troubler une poignée de pixels du jambage,
+pas assez pour dessiner quoi que ce soit.
+
+| taille | pixels touchés | écart maximal |
+|---:|---:|---:|
+| 16 px | 18 sur 256 (7 %) | 47 / 255 |
+| 22 px | 32 (6,6 %) | 74 |
+| 24 px | 40 (6,9 %) | 79 |
+| 32 px | 60 (5,9 %) | 94 |
+| 48 px | 118 (5,1 %) | 127 |
+
+La distinction compte pour régler l'icône : il n'y a rien à retirer à
+16 px, le filon y coûte déjà presque rien ; il y a seulement à ne pas
+compter dessus. Ce qui porte à cette taille, c'est la silhouette, le
 contraste des traits, et une arête claire qui tire l'œil vers le coin
 haut-gauche. C'est l'ordre dans lequel il faut penser l'icône.

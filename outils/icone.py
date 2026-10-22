@@ -40,7 +40,10 @@ BISEAU = 5.0
 PIERRE = {"jambage_clair": "#3A74CA", "jambage_ombre": "#234C92",
           "haute_clair":   "#74ABEE", "haute_ombre":   "#4280D6",
           "basse_clair":   "#4D8ADA", "basse_ombre":   "#2E60B4"}
-RAMPE = ["#112A58", "#1C4184", "#3A74C8", "#86B7F2", "#DBEBFF"]
+# La meme rampe de biseau que le logo complet, et non une copie : les
+# deux fichiers servent cote a cote dans la meme barre des taches, et
+# deux listes identiques finissent par diverger a la premiere retouche.
+RAMPE = G.BEVEL_HARD
 # La fente est COMBLEE, comme dans le logo complet : une resine
 # translucide, et surtout un menisque continu le long de la levre
 # amont. C'est la continuite de ce filet, pas sa couleur, qui fait
