@@ -1,10 +1,10 @@
-// Reglages d'optimisation des SVG livres.
+// Optimisation settings for the delivered SVGs.
 //
-// Deux precautions :
-//  - on garde les identifiants, parce que les masques de decoupe
-//    (clipPath) y font reference ;
-//  - on garde desc, qui sert a l'accessibilite (title est conserve
-//    par defaut).
+// Two precautions:
+//  - we keep the identifiers, because the clipping masks (clipPath)
+//    refer to them;
+//  - we keep desc, which serves accessibility (title is kept by
+//    default).
 export default {
   multipass: true,
   floatPrecision: 2,

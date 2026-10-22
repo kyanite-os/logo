@@ -1,157 +1,202 @@
-# Journal de conception du logo
+# Design journal for the logo
 
-Ce fichier garde les raisons derrière le dessin. Pour s'en servir, voir
-[`logo/README.md`](logo/README.md) ; pour le reconstruire, voir
-[`outils/README.md`](outils/README.md).
+This file keeps the reasons behind the drawing. To use it, see
+[`logo/README.md`](logo/README.md); to rebuild it, see
+[`tools/README.md`](tools/README.md).
 
-Fond sombre dans tous les cas.
+## The drawing
 
-## Le dessin
+A K **cut from a block**, not drawn with a pen. A single outline,
+chisel-cut corners, a bevel of constant width all the way round. Each
+facet of the bevel takes its value from the orientation of its edge
+under **a single light coming from the top left**. No perspective.
 
-Un K **taillé dans un bloc**, pas dessiné au trait. Contour unique,
-angles coupés au ciseau, biseau d'épaisseur constante tout autour.
-Chaque pan du biseau prend sa valeur de l'orientation de son arête sous
-**une seule lumière venant du haut-gauche**. Aucune perspective.
+### Asymmetry
 
-### Dissymétrie
+- The two obliques share neither slope (4/7 and 5/8), nor length, nor
+  thickness, nor the abscissa of their blade edge.
+- **The joints are short.** The fork is dropped to mid-height minus two,
+  and the lower arm meets the stem over only 23 units: the lower
+  counter-punch is 19 units tall against 11 before. Without that, the
+  lower arm and the stem read as a single mass.
+- Thicknesses: stem 30, upper arm 22.6, lower arm 21.2. The bevel is at
+  3, to let the notches breathe.
+- **The top and the foot of the stem are not of the same nature**: at the
+  top a single clean oblique cut, made in one stroke; at the bottom a
+  clean right angle on the left — no cut at all, the flank stays plumb to
+  the ground — and on the right a step, the corner left hanging like a
+  detached block.
+- The corners take two cuts of different lengths.
+- The long edges carry jogs.
 
-- Les deux obliques n'ont ni la même pente (4/7 et 5/8), ni la même
-  longueur, ni la même épaisseur, ni le tranchant à la même abscisse.
-- **Les attaches sont courtes.** La fourche est descendue à mi-hauteur
-  moins deux, et la branche basse rejoint le jambage sur 23 unités
-  seulement : le contre-poinçon du bas fait 19 unités de haut contre 11
-  auparavant. Sans ça la branche basse et le jambage se lisaient comme
-  une seule masse.
-- Épaisseurs : jambage 30, branche haute 22,6, branche basse 21,2.
-  Le biseau est à 3, pour laisser respirer les encoches.
-- **Le sommet et le pied du jambage ne sont pas de même nature** :
-  en haut une seule coupe oblique franche, d'un seul geste ; en bas un
-  angle droit franc à gauche — sans aucune coupe, le flanc reste
-  d'aplomb jusqu'au sol — et à droite un gradin, le coin resté en l'air
-  comme un bloc détaché.
-- Les angles reçoivent deux coupes de longueurs différentes.
-- Les arêtes longues portent des décrochements.
+## The material
 
-## La matière
+Read as granite, at three scales: the kyanite blades (broad structure and
+light), then patches the size of a crystal, then the fine grain — pale
+quartz flecks, dark mica specks. The density of the grain is not uniform:
+six nests make it vary.
 
-Lue comme du granite, à trois échelles : les lames de kyanite (structure
-large et lumière), des plages de la taille d'un cristal, puis le grain
-fin — éclats clairs de quartz, points sombres de mica. La densité du
-grain n'est pas uniforme : six foyers la font varier.
+Over the top, **fractures** broken across the cleavage.
 
-Par-dessus, des **fractures** brisées en travers du clivage.
+## The two additions of that round
 
-## Les deux ajouts de ce tour
+**The crack is filled.** This was the last substantive change, and the
+most important.
 
-**La fente est comblée.** C'est le dernier changement de fond, et le
-plus important.
+An open crack in the logo of a system that sells itself as immutable and
+hardened says the opposite of what we want: it reads as damage. A
+**filled** crack says the reverse — sealed, consolidated. In mineralogy
+it is a secondary vein sealing a fracture; elsewhere it is kintsugi. Same
+mineral language, message turned around.
 
-Une fente ouverte dans le logo d'un système qui se vend comme immuable
-et durci dit le contraire de ce qu'on veut : on lit de la casse. Une
-fente **remplie** dit l'inverse — scellée, consolidée. En minéralogie
-c'est un filon secondaire qui colmate une fracture ; ailleurs c'est le
-kintsugi. Même langage minéral, message retourné.
+What makes it read "filled" rather than "broken" is not the colour, it is
+**continuity**:
 
-Ce qui fait lire « rempli » plutôt que « cassé » n'est pas la couleur,
-c'est **la continuité** :
+- a **meniscus** — the resin climbing against the wall — running
+  unbroken along the near lip. A break edge, by contrast, gives a choppy
+  highlight. It has to stay a thread: wide, it bleeds at small sizes;
+- clean edges, and **no missing chips**: the chipping of the open version
+  is removed;
+- a dark stone edging underneath, which sets the vein *in* the stone
+  instead of leaving it floating on top;
+- the material is translucent, so the grain shows through —
+  `fill-opacity`, not a flat fill;
+- the secondary cracks are sealed too: it is the whole network that is
+  closed.
 
-- un **ménisque** — la remontée de la résine contre la paroi — qui
-  court sans interruption le long de la lèvre amont. Une arête de
-  cassure, elle, donne un reflet haché. Il doit rester un filet :
-  large, il bave dès les petites tailles ;
-- des bords nets, et **aucun éclat manquant** : les écaillures de la
-  version ouverte sont supprimées ;
-- un liseré de pierre sombre dessous, qui pose le filon *dans* la
-  pierre au lieu de le faire flotter dessus ;
-- la matière est translucide, donc le grain transparaît au travers —
-  `fill-opacity`, pas un aplat ;
-- les fissures secondaires sont comblées elles aussi : c'est tout le
-  réseau qui est scellé.
+The path keeps its irregularities — it wanders, it pinches and swells,
+the two lips drift independently — but less than the open break: the
+resin follows the fracture, its own surface is smooth.
 
-Le tracé garde ses irrégularités — il divague, il pince et gonfle, les
-deux lèvres dérivent indépendamment — mais moins que la cassure
-ouverte : la résine épouse la fracture, sa surface est lisse.
+The noise driving all of this is **smoothed**. Noise uncorrelated from
+one point to the next would give saw teeth; a fracture drifts slowly.
 
-Le bruit qui pilote tout cela est **lissé**. Un bruit décorrélé d'un
-point au suivant donnerait des dents de scie ; une fracture, elle,
-dérive lentement.
+Two doses live in `tools/block.py` — `RESIN_MILKY`, the one shipped, and
+`RESIN_MINERAL`, more discreet and more stone-like.
 
-Deux dosages existent dans `outils/bloc.py` — `RESINE_CLAIRE`, retenue,
-et `RESINE_SOMBRE`, plus discrète et plus minérale.
+**Spangles.** They become **bubbles caught in the resin**: small angular
+shards and diamonds, pale and dark. No star shapes.
 
-**Paillettes.** Elles deviennent des **bulles prises dans la résine** :
-petits éclats anguleux et losanges, clairs et sombres. Aucune forme en
-étoile.
+**Translucent planes.** Kyanite is transparent. Fifteen broad planes at
+low opacity cross along three cleavage directions that match none of the
+visible faces; where they overlap, the value builds up. Two planes pass
+over everything, like light travelling through the mass.
 
-**Plans translucides.** La kyanite est transparente. Quinze larges plans
-à faible opacité se croisent suivant trois directions de clivage qui ne
-sont celles d'aucune face visible ; là où ils se superposent, la valeur
-s'accumule. Deux plans passent par-dessus tout, comme la lumière qui
-traverse la masse.
+The opacity is the SVG attribute `fill-opacity`, **not a filter**: the
+rendering stays identical everywhere, system icons included.
 
-L'opacité est l'attribut SVG `fill-opacity`, **pas un filtre** : le rendu
-reste identique partout, y compris en icône système.
+## Fineness: four scales that overlap
 
-## Finesse : quatre échelles qui se recouvrent
+So that the underlying shapes stop reading, none of the four has a
+straight contour:
 
-Pour qu'on ne lise plus les formes de base, aucune des quatre n'a de
-contour rectiligne :
+1. **The blades** of kyanite, broken into six segments with a
+   perpendicular drift at each node. Two neighbouring blades share
+   exactly the same break: they tile the band with no gap.
+2. **The lamellae**, short and fine, caught between the big ones. They
+   are shards, not lines that cross. *(See the note at the end of this
+   file: the shipped code does not currently do this.)*
+3. **The granite grain**, at three sizes, with uneven density.
+4. **The dry fractures**, across the cleavage, all of different length,
+   width and contrast. One in three does not catch the light. These stay
+   open: they are surface micro-cracks, not the fracture that runs
+   through.
 
-1. **Les lames** de kyanite, brisées en six segments avec une dérive
-   perpendiculaire à chaque nœud. Deux lames voisines partagent
-   exactement la même brisure : elles pavent la bande sans jour.
-2. **Les lamelles**, courtes et fines, prises entre les grandes. Ce sont
-   des éclats, pas des traits qui traversent.
-3. **Le grain** granitique, à trois tailles, densité inégale.
-4. **Les fractures** sèches, en travers du clivage, toutes de
-   longueur, largeur et contraste différents. Une sur trois ne prend
-   pas la lumière. Elles restent ouvertes, elles : ce sont des micro-
-   fêlures de surface, pas la fracture traversante.
+The bevel is double: a narrow keen edge (0.8) that parts from its facet —
+darker in shadow, keener in daylight — then the main facet.
 
-Le biseau est double : une arête vive étroite (0,8) qui s'écarte de son
-pan — plus sombre à l'ombre, plus vive au jour — puis le pan principal.
+Setting shipped: `K3 — deep mine`, translucent planes at 1.55 and
+spangles at 1.30. Both knobs are at the bottom of `tools/draw.py`.
 
-Dosage retenu : `K3 — fond de mine`, plans translucides à 1,55 et
-paillettes à 1,30. Les deux molettes sont en bas de
-`outils/dessine.py`.
+## The two grounds
 
-## Palette (fond `#0F1522`)
+The drawing was cut for a dark background, and for a long time that was
+the only version. It does not survive on a light one, and not for a
+reason that tuning can fix.
 
-| rôle | hex |
-|---|---|
-| roche, 9 valeurs | `#15306A` `#1B3B7C` `#21468E` `#2851A0` `#2E5CB1` `#3668C1` `#3F75CE` `#4A83DA` `#5793E4` |
-| biseau, 5 valeurs | `#112A58` `#1C4184` `#3A74C8` `#86B7F2` `#DBEBFF` |
-| mica | `#1C3C76` `#22477F` |
-| quartz | `#86B6EE` `#A8CCF4` |
-| fente | creux `#15376E`, fond `#0E2650`, paroi aval `#3570C4`, lèvre `#8FBDF4` |
-| paillettes | `#C6DEFA` `#A8CCF4` `#88B8F0` `#6AA0E8` `#4D86DA` |
-| plans | clair `#BBD8F8`, sombre `#0C2149` |
+Everything is lit by one light from the top left, and the keenest facet —
+the one that draws the contour — blows out to near-white (`#DBEBFF`).
+That works against `#0F1522`: 15.07:1. Against `#FFFFFF` the same edge is
+**1.21:1**. Measured on the rendered pixels, about 40% of the contour
+falls below 3:1 on white. The shape opens up at the top left.
 
-## Contraintes tenues
+The fix is not to move the light, and not to recolour. It is to move the
+whole value scale. On a dark ground the block is a lit mass in a
+near-black room, so its brightest facet can exceed everything around it.
+On a light ground white is the brightest thing in the frame, so the stone
+has to sit **below** the page instead of above it: deep navy in shadow,
+mid blue in the light.
 
-Polygones uniquement. Aucun filtre, aucun bitmap, aucun dégradé.
-Les masques de découpe sont des polygones.
+What is preserved is not the values but the **intervals** between them.
+The ratios that carry the chiselled read land within a few hundredths of
+the dark palette's:
 
-Le générateur vérifie numériquement qu'aucun pan de biseau ne se
-retourne : sur une arête plus courte que le biseau, les deux pans
-voisins se refermeraient l'un sur l'autre et fabriqueraient une dent.
-Ils sont repliés en pointe.
+| | dark | light |
+|---|---|---|
+| stem against upper arm | 1.94 | 2.18 |
+| upper arm against lower arm | 1.48 | 1.45 |
+| lit face against its own shadow | 1.80 | 1.82 |
 
-## La version icône
+The light comes from the same place; it is the room that changed.
 
-Sous 128 px, le grain, les paillettes et les plans ne font plus que du
-bruit. `kyanite-icon.svg` les retire, allège le contour de ses
-décrochements, et porte le biseau de 3 à 5.
+The asymmetry this produces is worth stating, because it explains why
+there have to be two files and not one clever one. On a dark ground the
+contour is held by the **bright** keen edge, and the deepest facet is
+*meant* to melt into the background. On a light ground the contour is
+held by the **mass**, at 18.6:1 at its deepest, and the keen edge is
+merely the palest part of the stone, at 3.47:1 — lighter than the stone,
+never lighter than the page.
 
-**Ce qui survit, mesuré et non supposé :**
+`block.py` checks this numerically on every build, the same way it checks
+that no bevel facet flips over: the keen edge must clear 3:1 against its
+own ground. That assertion is exactly what the dark palette fails on
+white, which is how the gap was found rather than guessed at.
+
+## Palette
+
+See [`logo/README.md`](logo/README.md#palette) for both grounds in full.
+Reference backgrounds: `#0F1522` dark, `#FFFFFF` light.
+
+## Constraints held
+
+Polygons only. No filter, no bitmap, no gradient. The clipping masks are
+polygons.
+
+The generator checks numerically that no bevel facet flips over: on an
+edge shorter than the bevel, the two neighbouring facets would close in
+on each other and make a tooth. They are folded to a point instead.
+
+## The icon version
+
+Below 128 px the grain, the spangles and the planes are nothing but
+noise. `kyanite-icon.svg` drops them, strips the jogs from the outline,
+and takes the bevel from 3 to 5.
+
+**What survives, measured rather than assumed:**
 
 | | 16 px | 22–32 px | 48–128 px |
 |---|---|---|---|
-| silhouette | oui | oui | oui |
-| contraste entre les trois traits | oui | oui | oui |
-| arête éclairée en haut-gauche | oui, dominante | oui | oui |
-| fente | **non** | ligne sourde | oui |
+| silhouette | yes | yes | yes |
+| contrast between the three strokes | yes | yes | yes |
+| lit edge at the top left | yes, dominant | yes | yes |
+| the seam | **no** | muted line | yes |
 
-À 16 px la fente a disparu : il ne reste que la silhouette, le
-contraste des traits, et une arête claire qui tire l'œil vers le coin
-haut-gauche. C'est l'ordre dans lequel il faut penser l'icône.
+At 16 px the seam has gone: all that is left is the silhouette, the
+contrast between the strokes, and a pale edge pulling the eye towards the
+top-left corner. That is the order in which the icon has to be thought
+about.
+
+## A gap between this journal and the code
+
+Under *Fineness* above, the fine lamellae are described as short shards
+that do not cross the band. **The shipped code does not draw them that
+way.** `block.py` carried two definitions of `fines_axis` and
+`fines_stem`: an earlier pair that drew short shards, and a later pair,
+spanning the full width of the band, that shadowed them. Python keeps the
+later one, so the short-shard version had never rendered.
+
+The dead copy has been removed, so the file now says what it does. The
+description above is the intent; the files show the crossing version.
+Switching is a small change to those two functions — and it changes the
+shipped drawing, so it is left as a decision to make, not a bug to
+quietly fix.

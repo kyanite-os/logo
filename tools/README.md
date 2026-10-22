@@ -1,49 +1,66 @@
-# Les outils qui écrivent le dossier `logo/`
+# The tools that write the `logo/` directory
 
-Le dessin est **asymétrique et irrégulier par construction** : grain de
-granite, plans de clivage brisés, lamelles, fractures, fente qui
-divague. Tout cela est tiré d'un générateur à graine fixe — donc
-parfaitement reproductible — mais serait intenable à tenir à la main.
+The drawing is **asymmetrical and irregular by construction**: granite
+grain, broken cleavage planes, lamellae, fractures, a seam that wanders.
+All of it comes out of a fixed-seed generator — so perfectly
+reproducible — but would be unbearable to maintain by hand.
 
-Les SVG produits restent commentés, en polygones seulement, et se
-modifient à la main sans problème.
+The SVGs the scripts write stay commented, polygons only, and can be
+edited by hand without trouble. svgo strips the comments on the way to
+`logo/`, so the delivered files carry none — run a generator on its own
+to get the commented version.
 
 ```sh
-sh construire.sh        # reconstruit les trois SVG et les neuf PNG
+sh build.sh        # rebuilds the six SVGs and the twenty PNGs
 ```
 
-| fichier | rôle |
+| file | role |
 |---|---|
-| `bloc.py` | La géométrie : contour, coupes d'angle, biseau, lames de kyanite, grain, fractures, fente. Vérifie numériquement qu'aucun pan de biseau ne se retourne. |
-| `dessine.py` | Le logo complet : plans translucides, paillettes, double biseau, écriture du SVG. |
-| `icone.py` | La version simplifiée pour petites tailles. |
-| `logotype.py` | Le symbole suivi du mot, Inter SemiBold vectorisé (fontTools). |
-| `exporte.py` | Les PNG, via Chromium sans interface. |
-| `optimise.py` | Compression des PNG : pngquant puis oxipng, avec mesure de l'écart. |
-| `svgo.config.mjs` | Réglages d'optimisation. Garde les identifiants, dont dépendent les masques de découpe. |
+| `block.py` | The geometry: outline, corner cuts, bevel, kyanite blades, grain, fractures, seam. Also both palettes and the two themes. Checks numerically that no bevel facet flips over, and that the keen edge clears 3:1 against its own ground. |
+| `draw.py` | The full logo: translucent planes, spangles, double bevel, writing the SVG. |
+| `icon.py` | The simplified version for small sizes. |
+| `logotype.py` | The symbol followed by the word, Inter SemiBold converted to outlines (fontTools). |
+| `export.py` | The PNGs, through headless Chromium. |
+| `optimize.py` | PNG compression: pngquant then oxipng, with the deviation measured. |
+| `svgo.config.mjs` | Optimisation settings. Keeps the identifiers, which the clipping masks depend on. |
 
-## Les deux molettes
+## The two grounds
 
-En bas de `dessine.py` : l'opacité des plans traversants et la taille
-des paillettes. Le réglage livré est `1.55` / `1.30`.
+The geometry is shared; only the values change. A theme is a plain dict
+at the bottom of `block.py` — `ON_DARK` and `ON_LIGHT` — holding every
+tint the drawing needs, and each generator takes one and writes the
+matching file.
 
-## L'optimisation des PNG
+Adding a third ground means writing a third dict, not touching any of the
+drawing code. `check_ground()` will tell you straight away if its keen
+edge is too pale to hold the contour against its own background; see the
+*two grounds* section in [`../NOTES.md`](../NOTES.md#the-two-grounds) for
+why that is the value that matters.
 
-`optimise.py` reprend la chaîne de squoosh.app, avec les mêmes deux
-moteurs : **pngquant** (libimagequant) pour réduire la palette, puis
-**oxipng** avec zopfli pour recompresser sans perte.
+## The two knobs
 
-Pour chaque fichier il essaie les deux chemins — sans perte seul, et
-palette puis sans perte — mesure l'écart avec l'original et garde le
-plus petit des deux tant que l'écart reste sous le seuil. L'écart est
-mesuré sur les canaux **prémultipliés** : sur une image à fond
-transparent, comparer les RGB bruts d'un pixel invisible n'a aucun sens.
+At the bottom of `draw.py`: the opacity of the planes passing through and
+the size of the spangles. The shipped setting is `1.55` / `1.30`, and it
+serves both grounds.
 
-Résultat sur le jeu livré : 226 Ko → 79 Ko, soit −65 %, pour un écart
-quadratique moyen d'au plus 1,07 sur 255.
+## PNG optimisation
 
-## Dépendances
+`optimize.py` reproduces the squoosh.app chain, with the same two
+engines: **pngquant** (libimagequant) to cut the palette down, then
+**oxipng** with zopfli to recompress losslessly.
+
+For each file it tries both routes — lossless alone, and palette then
+lossless — measures the deviation from the original, and keeps the
+smaller of the two as long as the deviation stays under the limit. The
+deviation is measured on **premultiplied** channels: on an image with a
+transparent background, comparing the raw RGB of an invisible pixel means
+nothing.
+
+Result on the delivered set: 591 kB → 206 kB, that is −65%, for a root
+mean square deviation of at most 1.07 out of 255.
+
+## Dependencies
 
 `python3`, `pillow`, `fonttools` (logotype), `pyoxipng`, `pngquant`,
-`svgo`, et un Chromium sans interface (PNG). Le chemin de Chromium est
-en haut de `exporte.py`.
+`svgo`, and a headless Chromium (PNGs). Chromium's path is at the top of
+`export.py`.

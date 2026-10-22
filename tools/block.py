@@ -1,74 +1,125 @@
 #!/usr/bin/env python3
-"""Kyanite — tour 3. Un K taille dans un bloc, pour fond sombre.
+"""Kyanite — round 3. A K cut from a block, for dark backgrounds.
 
-Rien de symetrique : les deux branches n'ont ni la meme pente, ni la
-meme longueur, ni la meme epaisseur ; les aretes longues portent des
-decrochements ; les angles sont coupes inegalement.
+Nothing is symmetrical: the two arms share neither slope, nor length,
+nor thickness; the long edges carry jogs; the corners are chamfered
+unevenly.
 
-La matiere est lue comme du granite : une structure large (les lames de
-kyanite, qui donnent la lumiere), puis des plages de la taille d'un
-cristal, puis un grain fin ou se melent des eclats clairs (quartz) et
-des points sombres (mica). Trois echelles, aucune symetrie.
+The material reads as granite: a broad structure (the kyanite blades,
+which carry the light), then patches the size of a crystal, then a fine
+grain mixing pale flecks (quartz) and dark specks (mica). Three scales,
+no symmetry anywhere.
 
-Une seule lumiere, venant du haut-gauche. Aucune perspective.
-Polygones uniquement : aucun filtre, aucun bitmap, aucun degrade.
+A single light, coming from the top left. No perspective.
+Polygons only: no filter, no bitmap, no gradient.
 """
-import math, os, random
+import math, random
 
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "logo")
 LIGHT = (-math.sqrt(0.5), -math.sqrt(0.5))
 
 # ------------------------------------------------------------------ palette
-# Taillee pour fond sombre : la masse reste franchement au-dessus du fond,
-# le biseau haut-gauche porte la lumiere, les creux plongent.
-ROCK = ["#1B3C78", "#22488B", "#28539D", "#2F5FAF", "#366BC0",
-        "#3F78CE", "#4A86DA", "#5795E4", "#67A4EC"]
+# Cut for a dark background: the mass stays well above the background,
+# the top-left bevel carries the light, the hollows sink.
 ROCK_DEEP = ["#15306A", "#1B3B7C", "#21468E", "#2851A0", "#2E5CB1",
              "#3668C1", "#3F75CE", "#4A83DA", "#5793E4"]
-MICA   = ["#1C3C76", "#22477F"]   # points sombres (biotite)
-QUARTZ = ["#86B6EE", "#A8CCF4"]   # eclats clairs (quartz)
-BEVEL      = ["#17376F", "#21488F", "#3A74C8", "#72ACEE", "#BEDCFA"]
+MICA   = ["#1C3C76", "#22477F"]   # dark specks (biotite)
+QUARTZ = ["#86B6EE", "#A8CCF4"]   # pale flecks (quartz)
 BEVEL_HARD = ["#112A58", "#1C4184", "#3A74C8", "#86B7F2", "#DBEBFF"]
-SEAM = {"creux": "#15376E", "fond": "#0E2650", "aval": "#3570C4", "levre": "#8FBDF4"}
+SEAM = {"hollow": "#15376E", "floor": "#0E2650", "far_wall": "#3570C4", "lip": "#8FBDF4"}
 FRACT = {"dark": "#1E4588", "light": "#6CA2E8"}
+SPANGLE = ["#C6DEFA", "#A8CCF4", "#88B8F0", "#6AA0E8", "#4D86DA"]
+PLANE_CLEAR, PLANE_SHADE = "#BBD8F8", "#0C2149"   # translucent planes
+INK = "#DCE6F2"                                   # the word, in the logotype
+GROUND = "#0F1522"                                # reference background
+# the icon flattens its tints: at 16 px, stacked opacities only give mush
+ICON_STONE = {"stem_lit": "#3A74CA", "stem_shade": "#234C92",
+              "arm_lit":  "#74ABEE", "arm_shade":  "#4280D6",
+              "leg_lit":  "#4D8ADA", "leg_shade":  "#2E60B4"}
+ICON_SEAM = {"stone_lip": "#163A74", "body": "#7CA6E0", "meniscus": "#EAF4FF"}
 
-# ---------------------------------------------------------------- geometrie
-SL, SR = 10.0, 40.0          # jambage : 30 d'epaisseur, c'est le pilier
+# The earlier round's softer palette. Kept for the record; the shipped
+# drawing uses ROCK_DEEP and BEVEL_HARD.
+ROCK = ["#1B3C78", "#22488B", "#28539D", "#2F5FAF", "#366BC0",
+        "#3F78CE", "#4A86DA", "#5795E4", "#67A4EC"]
+BEVEL = ["#17376F", "#21488F", "#3A74C8", "#72ACEE", "#BEDCFA"]
+
+# ------------------------------------------------ palette, light ground
+# Cut for a light background. Same mineral, same single light from the
+# top left; what changes is where the whole value scale sits.
+#
+# On a dark ground the block is a lit mass in a near-black room, and the
+# keenest facet can blow out to near-white (#DBEBFF). On a light ground
+# that cannot hold: white is now the brightest thing in the frame, so a
+# near-white edge simply vanishes into the page — 1.21:1 against #FFFFFF,
+# which is what opened the contour and is the whole reason this palette
+# exists. The scale is therefore pushed BELOW the page: deep navy in
+# shadow, mid blue in the light.
+#
+# What is preserved is not the values but the INTERVALS between them.
+# The ratios that carry the chiselled read — the three strokes apart from
+# each other, each stroke's lit face against its own shadow — land within
+# a few hundredths of the dark palette's. The light still comes from the
+# top left; it is the room that changed, not the lamp.
+#
+# The consequence is an asymmetry worth knowing. On a dark ground the
+# contour is held by the keen lit edge (15:1) and the deepest facet is
+# allowed to sink into the background. On a light ground it is the mass
+# itself that holds the contour (18.6:1 at the deepest), and the lit edge
+# is merely the palest part of the stone (3.47:1) — never paler than the
+# page. That is why neither variant survives on the other's ground.
+ROCK_LIGHT = ["#0B1C40", "#0F244E", "#132C5C", "#17356A", "#1C3E79",
+              "#214887", "#285496", "#2F60A5", "#3A6DBE"]
+BEVEL_LIGHT = ["#07122A", "#0F2350", "#23508F", "#3A74C8", "#4E8BDC"]
+MICA_LIGHT   = ["#0A1835", "#0E1E42"]
+QUARTZ_LIGHT = ["#5E90D8", "#7BA8E4"]
+FRACT_LIGHT = {"dark": "#0D2048", "light": "#3E72C4"}
+SPANGLE_LIGHT = ["#A8C8F0", "#8BB0E6", "#6E98DC", "#5480CE", "#3F6CC0"]
+PLANE_CLEAR_LIGHT, PLANE_SHADE_LIGHT = "#A9C8EC", "#06102A"
+INK_LIGHT = "#16253D"
+GROUND_LIGHT = "#FFFFFF"
+ICON_STONE_LIGHT = {"stem_lit": "#255494", "stem_shade": "#122C57",
+                    "arm_lit":  "#4E8BDC", "arm_shade":  "#2A5FA8",
+                    "leg_lit":  "#336FC0", "leg_shade":  "#1C4480"}
+ICON_SEAM_LIGHT = {"stone_lip": "#0E2448", "body": "#5E8ECE", "meniscus": "#CFE2F8"}
+
+# ---------------------------------------------------------------- geometry
+SL, SR = 10.0, 40.0          # stem: 30 thick, it is the pillar
 TOP, BOT = 10.0, 90.0
 FORK = 48.0
-ARM_Y0, ARM_Y1 = 22.0, FORK  # branche haute : pente 4/7
-LEG_Y0, LEG_Y1 = FORK, 73.0  # branche basse : pente 5/8, attache plus courte
-ARM_S, LEG_S = -4.0 / 7.0, 5.0 / 8.0      # pentes differentes : pas de miroir
-ARM_X, LEG_X = 86.0, 88.0                 # bras courts : on tient dans le carre
+ARM_Y0, ARM_Y1 = 22.0, FORK  # upper arm: slope 4/7
+LEG_Y0, LEG_Y1 = FORK, 73.0  # lower arm: slope 5/8, shorter joint
+ARM_S, LEG_S = -4.0 / 7.0, 5.0 / 8.0      # different slopes: no mirroring
+ARM_X, LEG_X = 86.0, 88.0                 # short arms: it fits the square
 X_ARM_TOP = SR + (ARM_Y0 - TOP) * 7.0 / 4.0
 Y_ARM_TIP = ARM_Y1 + (ARM_X - SR) * ARM_S
 Y_LEG_TIP = LEG_Y0 + (LEG_X - SR) * LEG_S
 X_LEG_BOT = SR + (BOT - LEG_Y1) * 8.0 / 5.0
 
 OUTLINE = [
-    # Le sommet et le pied du jambage ne sont pas de meme nature.
-    # En haut : une seule coupe oblique, franche, d'un seul coup.
-    # En bas : a gauche un angle droit franc, le flanc d'aplomb jusqu'au
-    # sol ; a droite un gradin, le coin reste en l'air.
-    ((SL, 17.0),         (7.0, 8.0)),   # coin haut-gauche
-    ((SR, TOP),          (4.5, 4.0)),   # haut du jambage, coupe nette
-    ((SR, ARM_Y0),       (4.0, 5.0)),   # fond de l'encoche haute
-    ((X_ARM_TOP, TOP),   (6.0, 5.0)),   # depart de la branche haute
-    ((ARM_X, TOP),       (5.0, 3.5)),   # coin haut-droit
-    ((ARM_X, Y_ARM_TIP), (3.5, 6.0)),   # bas du tranchant haut
-    ((65.0, 34.5),       (0.0, 0.0)),   # decrochement
-    ((SR, FORK),         (7.0, 6.0)),   # la fourche
-    ((68.0, 66.6),       (0.0, 0.0)),   # decrochement
-    ((LEG_X, Y_LEG_TIP), (5.0, 3.0)),   # haut du tranchant bas
-    ((LEG_X, BOT),       (3.0, 5.0)),   # coin bas-droit
-    ((X_LEG_BOT, BOT),   (5.0, 4.0)),   # depart de la branche basse
-    ((SR, LEG_Y1),       (4.0, 2.0)),   # fond de l'encoche basse, remonte
-    ((SR, 85.0),         (2.0, 2.0)),   # le coin DROIT du pied est casse :
-    ((26.0, 85.0),       (2.0, 2.0)),   # un gradin, il reste en l'air
+    # The top and the foot of the stem are not of the same nature.
+    # At the top: a single clean oblique cut, made in one stroke.
+    # At the bottom: on the left a clean right angle, the flank plumb
+    # all the way to the ground; on the right a step, the corner left
+    # hanging in the air.
+    ((SL, 17.0),         (7.0, 8.0)),   # top-left corner
+    ((SR, TOP),          (4.5, 4.0)),   # top of the stem, clean cut
+    ((SR, ARM_Y0),       (4.0, 5.0)),   # bottom of the upper notch
+    ((X_ARM_TOP, TOP),   (6.0, 5.0)),   # start of the upper arm
+    ((ARM_X, TOP),       (5.0, 3.5)),   # top-right corner
+    ((ARM_X, Y_ARM_TIP), (3.5, 6.0)),   # foot of the upper blade edge
+    ((65.0, 34.5),       (0.0, 0.0)),   # jog
+    ((SR, FORK),         (7.0, 6.0)),   # the fork
+    ((68.0, 66.6),       (0.0, 0.0)),   # jog
+    ((LEG_X, Y_LEG_TIP), (5.0, 3.0)),   # top of the lower blade edge
+    ((LEG_X, BOT),       (3.0, 5.0)),   # bottom-right corner
+    ((X_LEG_BOT, BOT),   (5.0, 4.0)),   # start of the lower arm
+    ((SR, LEG_Y1),       (4.0, 2.0)),   # bottom of the lower notch, raised
+    ((SR, 85.0),         (2.0, 2.0)),   # the RIGHT corner of the foot is broken:
+    ((26.0, 85.0),       (2.0, 2.0)),   # a step, it stays up in the air
     ((26.0, BOT),        (2.0, 2.5)),
-    ((SL, BOT),          (0.0, 0.0)),   # coin bas-gauche : angle droit franc,
-    ((SL, 72.0),         (0.0, 0.0)),   # le flanc reste d'aplomb jusqu'ici
-    ((9.1, 58.0),        (0.0, 0.0)),   # decrochements du flanc gauche
+    ((SL, BOT),          (0.0, 0.0)),   # bottom-left corner: clean right angle,
+    ((SL, 72.0),         (0.0, 0.0)),   # the flank stays plumb up to here
+    ((9.1, 58.0),        (0.0, 0.0)),   # jogs along the left flank
     ((10.9, 34.0),       (0.0, 0.0)),
 ]
 BEVEL_W = 3.0
@@ -98,17 +149,17 @@ def edge_frames(poly):
         out.append((p, u, (-u[1], u[0]) if A > 0 else (u[1], -u[0])))
     return out
 
-def verifie(outer, inner):
-    """Un pan de biseau qui se retourne fabrique une dent. On verifie que
-    chaque arete interieure va bien dans le meme sens que son exterieure."""
-    n, mauvais = len(outer), []
+def reversed_edges(outer, inner):
+    """A bevel facet that flips over makes a tooth. We check that every
+    inner edge still runs the same way as its outer one."""
+    n, bad = len(outer), []
     for i in range(n):
         j = (i + 1) % n
         uo = (outer[j][0] - outer[i][0], outer[j][1] - outer[i][1])
         ui = (inner[j][0] - inner[i][0], inner[j][1] - inner[i][1])
         if uo[0] * ui[0] + uo[1] * ui[1] < -1e-9:
-            mauvais.append((i, outer[i], outer[j]))
-    return mauvais
+            bad.append((i, outer[i], outer[j]))
+    return bad
 
 def inset(poly, d):
     fr = edge_frames(poly)
@@ -122,13 +173,13 @@ def inset(poly, d):
         w = sub(P2, P1)
         t = (w[0] * u2[1] - w[1] * u2[0]) / cr
         out.append((P1[0] + u1[0] * t, P1[1] + u1[1] * t))
-    # Sur une arete plus courte que le biseau, les deux pans voisins se
-    # croiseraient et fabriqueraient une dent. On les referme en pointe.
+    # On an edge shorter than the bevel, the two neighbouring facets
+    # would cross and make a tooth. We fold them to a point instead.
     for _ in range(6):
-        mauvais = verifie(poly, out)
-        if not mauvais:
+        bad = reversed_edges(poly, out)
+        if not bad:
             break
-        for i, _a, _b in mauvais:
+        for i, _a, _b in bad:
             j = (i + 1) % len(out)
             m = ((out[i][0] + out[j][0]) / 2.0, (out[i][1] + out[j][1]) / 2.0)
             out[i] = m; out[j] = m
@@ -143,7 +194,7 @@ def bevel_ring(outer, inner, ramp):
         q.append(([outer[i], outer[(i + 1) % n], inner[(i + 1) % n], inner[i]], ramp[k]))
     return q
 
-# -------------------------------------------- lames de kyanite (structure)
+# ------------------------------------------------ kyanite blades (structure)
 XF = 118.0
 ARM_A = [4.0, 11.0, 15.0, 20.0, 25.0, 29.5, 34.5, 40.0, 50.0]
 ARM_D = [2.5, -1.8, 3.2, -2.6, 1.4, 3.6, -2.0, 2.2, -1.0]
@@ -155,10 +206,10 @@ STEM_X = [3.0, 11.0, 15.0, 19.5, 24.0, 28.0, 32.0, 36.0, 43.0]
 STEM_D = [1.2, -0.9, 1.6, -1.3, 0.7, 1.9, -1.1, 0.9, -0.6]
 STEM_V = [6, 5, 6, 4, 3, 4, 2, 1]
 
-# ------------------------------------------- ou en est-on dans la structure
+# ----------------------------------------- where we are inside the structure
 def base_index(x, y):
-    """Valeur de fond au point donne : sert a poser le grain sans
-    effacer la lumiere."""
+    """The background value at a given point: used to lay the grain down
+    without wiping out the light."""
     if x <= SR:
         bx = [STEM_X[i] + STEM_D[i] * (y + 8.0) / 116.0 for i in range(len(STEM_X))]
         for i in range(len(STEM_V)):
@@ -177,9 +228,9 @@ def base_index(x, y):
             return V[i]
     return V[-1] if y >= by[-1] else V[0]
 
-def brisee(p0, p1, n, amp, rnd):
-    """Un plan de clivage n'est jamais une droite : on le brise en n
-    segments, avec une petite derive perpendiculaire a chaque noeud."""
+def broken_line(p0, p1, n, amp, rnd):
+    """A cleavage plane is never a straight line: we break it into n
+    segments, with a small perpendicular drift at each node."""
     dx, dy = p1[0] - p0[0], p1[1] - p0[1]
     L = math.hypot(dx, dy)
     nx, ny = -dy / L, dx / L
@@ -192,120 +243,23 @@ def brisee(p0, p1, n, amp, rnd):
     return out
 
 def blades_axis(anchors, deltas, slope, vals, ramp, seed):
-    """Lames d'une branche. Deux plans voisins partagent exactement la
-    meme brisure : les lames pavent la bande sans jour."""
+    """The blades of one arm. Two neighbouring planes share exactly the
+    same break: the blades tile the band with no gap."""
     rnd = random.Random(seed)
     run = (XF - SR) * slope
-    bords = [brisee((SR, y), (XF, y + run + d), 6, 1.15, rnd)
+    edges = [broken_line((SR, y), (XF, y + run + d), 6, 1.15, rnd)
              for y, d in zip(anchors, deltas)]
-    return [(bords[i] + bords[i + 1][::-1], ramp[vals[i]]) for i in range(len(vals))]
+    return [(edges[i] + edges[i + 1][::-1], ramp[vals[i]]) for i in range(len(vals))]
 
 def blades_stem(ramp, seed):
     rnd = random.Random(seed)
-    bords = [brisee((x, -8.0), (x + d, 108.0), 7, 0.95, rnd)
+    edges = [broken_line((x, -8.0), (x + d, 108.0), 7, 0.95, rnd)
              for x, d in zip(STEM_X, STEM_D)]
-    return [(bords[i] + bords[i + 1][::-1], ramp[STEM_V[i]]) for i in range(len(STEM_V))]
+    return [(edges[i] + edges[i + 1][::-1], ramp[STEM_V[i]]) for i in range(len(STEM_V))]
 
 def fines_axis(y0, y1, slope, n, ramp, seed):
-    """Lamelles fines prises entre les grandes. Ce sont des eclats courts,
-    pas des traits qui traversent : c'est ce qui empeche l'oeil de
-    retomber sur la forme de base."""
-    rnd = random.Random(seed)
-    out = []
-    for _ in range(n):
-        y = rnd.uniform(y0, y1)
-        w = rnd.uniform(0.25, 0.85)
-        xa = rnd.uniform(SR - 2.0, SR + 46.0)
-        xb = xa + rnd.uniform(14.0, 40.0)
-        ya, yb = y + (xa - SR) * slope, y + (xb - SR) * slope
-        drv = rnd.uniform(-1.6, 1.6)
-        a = brisee((xa, ya), (xb, yb + drv), 4, 0.6, rnd)
-        b = brisee((xa, ya + w), (xb, yb + w + drv), 4, 0.6, rnd)
-        v = base_index(min(XF - 1, (xa + xb) / 2), (ya + yb) / 2 + w / 2)
-        out.append((a + b[::-1], ramp[max(0, min(len(ramp) - 1, v + rnd.choice((-1, -1, 1, 1, 2))))]))
-    return out
-
-def fines_stem(n, ramp, seed):
-    rnd = random.Random(seed)
-    out = []
-    for _ in range(n):
-        x = rnd.uniform(SL - 1, SR + 1)
-        w = rnd.uniform(0.25, 0.7)
-        ya = rnd.uniform(4.0, 70.0)
-        yb = ya + rnd.uniform(16.0, 42.0)
-        drv = rnd.uniform(-1.4, 1.4)
-        a = brisee((x, ya), (x + drv, yb), 4, 0.55, rnd)
-        b = brisee((x + w, ya), (x + w + drv, yb), 4, 0.55, rnd)
-        v = base_index(x + w / 2, (ya + yb) / 2)
-        out.append((a + b[::-1], ramp[max(0, min(len(ramp) - 1, v + rnd.choice((-1, -1, 1, 1))))]))
-    return out
-
-# -------------------------------------------- lames de kyanite (structure)
-XF = 118.0
-ARM_A = [4.0, 11.0, 15.0, 20.0, 25.0, 29.5, 34.5, 40.0, 50.0]
-ARM_D = [2.5, -1.8, 3.2, -2.6, 1.4, 3.6, -2.0, 2.2, -1.0]
-ARM_V = [8, 7, 8, 6, 5, 6, 4, 5]
-LEG_A = [45.0, 50.0, 54.0, 57.5, 61.5, 65.5, 69.0, 75.0]
-LEG_D = [-1.5, 2.4, -2.9, 1.8, -2.2, 3.1, -1.4, 2.0]
-LEG_V = [6, 7, 5, 6, 3, 4, 2]
-STEM_X = [3.0, 11.0, 15.0, 19.5, 24.0, 28.0, 32.0, 36.0, 43.0]
-STEM_D = [1.2, -0.9, 1.6, -1.3, 0.7, 1.9, -1.1, 0.9, -0.6]
-STEM_V = [6, 5, 6, 4, 3, 4, 2, 1]
-
-# ------------------------------------------- ou en est-on dans la structure
-def base_index(x, y):
-    """Valeur de fond au point donne : sert a poser le grain sans
-    effacer la lumiere."""
-    if x <= SR:
-        bx = [STEM_X[i] + STEM_D[i] * (y + 8.0) / 116.0 for i in range(len(STEM_X))]
-        for i in range(len(STEM_V)):
-            if bx[i] <= x < bx[i + 1]:
-                return STEM_V[i]
-        return STEM_V[-1] if x >= bx[-1] else STEM_V[0]
-    if y <= ARM_Y1 + (x - SR) * ARM_S:
-        A, D, V, S = ARM_A, ARM_D, ARM_V, ARM_S
-    else:
-        A, D, V, S = LEG_A, LEG_D, LEG_V, LEG_S
-    run = (XF - SR) * S
-    t = (x - SR) / (XF - SR)
-    by = [A[i] + (run + D[i]) * t for i in range(len(A))]
-    for i in range(len(V)):
-        if by[i] <= y < by[i + 1]:
-            return V[i]
-    return V[-1] if y >= by[-1] else V[0]
-
-def brisee(p0, p1, n, amp, rnd):
-    """Un plan de clivage n'est jamais une droite : on le brise en n
-    segments, avec une petite derive perpendiculaire a chaque noeud."""
-    dx, dy = p1[0] - p0[0], p1[1] - p0[1]
-    L = math.hypot(dx, dy)
-    nx, ny = -dy / L, dx / L
-    out = [p0]
-    for i in range(1, n):
-        t = i / n
-        o = rnd.uniform(-amp, amp)
-        out.append((p0[0] + dx * t + nx * o, p0[1] + dy * t + ny * o))
-    out.append(p1)
-    return out
-
-def blades_axis(anchors, deltas, slope, vals, ramp, seed):
-    """Lames d'une branche. Deux plans voisins partagent exactement la
-    meme brisure : les lames pavent la bande sans jour."""
-    rnd = random.Random(seed)
-    run = (XF - SR) * slope
-    bords = [brisee((SR, y), (XF, y + run + d), 6, 1.15, rnd)
-             for y, d in zip(anchors, deltas)]
-    return [(bords[i] + bords[i + 1][::-1], ramp[vals[i]]) for i in range(len(vals))]
-
-def blades_stem(ramp, seed):
-    rnd = random.Random(seed)
-    bords = [brisee((x, -8.0), (x + d, 108.0), 7, 0.95, rnd)
-             for x, d in zip(STEM_X, STEM_D)]
-    return [(bords[i] + bords[i + 1][::-1], ramp[STEM_V[i]]) for i in range(len(STEM_V))]
-
-def fines_axis(y0, y1, slope, n, ramp, seed):
-    """Lamelles fines prises entre les grandes : c'est ce qui empeche
-    l'oeil de retomber sur la forme de base."""
+    """Fine lamellae caught between the big blades: this is what stops
+    the eye from falling back onto the underlying shape."""
     rnd = random.Random(seed)
     run = (XF - SR) * slope
     out = []
@@ -313,8 +267,8 @@ def fines_axis(y0, y1, slope, n, ramp, seed):
         y = rnd.uniform(y0, y1)
         w = rnd.uniform(0.25, 0.8)
         d0, d1 = rnd.uniform(-2.5, 2.5), rnd.uniform(-2.5, 2.5)
-        a = brisee((SR, y), (XF, y + run + d0), 5, 0.9, rnd)
-        b = brisee((SR, y + w), (XF, y + w + run + d1), 5, 0.9, rnd)
+        a = broken_line((SR, y), (XF, y + run + d0), 5, 0.9, rnd)
+        b = broken_line((SR, y + w), (XF, y + w + run + d1), 5, 0.9, rnd)
         v = base_index(SR + 12.0, y + (12.0 * slope) + w / 2)
         out.append((a + b[::-1], ramp[max(0, min(len(ramp) - 1, v + rnd.choice((-1, -1, 1, 1, 2))))]))
     return out
@@ -325,8 +279,8 @@ def fines_stem(n, ramp, seed):
     for _ in range(n):
         x = rnd.uniform(SL - 1, SR + 1)
         w = rnd.uniform(0.25, 0.7)
-        a = brisee((x, -8.0), (x + rnd.uniform(-2.0, 2.0), 108.0), 6, 0.8, rnd)
-        b = brisee((x + w, -8.0), (x + w + rnd.uniform(-2.0, 2.0), 108.0), 6, 0.8, rnd)
+        a = broken_line((x, -8.0), (x + rnd.uniform(-2.0, 2.0), 108.0), 6, 0.8, rnd)
+        b = broken_line((x + w, -8.0), (x + w + rnd.uniform(-2.0, 2.0), 108.0), 6, 0.8, rnd)
         v = base_index(x + w / 2, 50.0)
         out.append((a + b[::-1], ramp[max(0, min(len(ramp) - 1, v + rnd.choice((-1, -1, 1, 1))))]))
     return out
@@ -336,7 +290,7 @@ BAND_STEM = [(-8, -8), (SR, -8), (SR, 108), (-8, 108)]
 BAND_ARM = [(SR, ARM_Y0), (SR + 7 * KK, ARM_Y0 - 4 * KK), (SR + 7 * KK, ARM_Y1 - 4 * KK), (SR, ARM_Y1)]
 BAND_LEG = [(SR, LEG_Y0), (SR + 8 * KK, LEG_Y0 + 5 * KK), (SR + 8 * KK, LEG_Y1 + 5 * KK), (SR, LEG_Y1)]
 
-# ------------------------------------------------------------ grain granitique
+# ---------------------------------------------------------- granite grain
 def fleck(rnd, cx, cy, r):
     k = rnd.randint(4, 6)
     a0 = rnd.random() * math.tau
@@ -348,42 +302,43 @@ def fleck(rnd, cx, cy, r):
         out.append((cx + math.cos(a) * rr, cy + math.sin(a) * rr * el))
     return out
 
-def granite(seed, ramp):
-    """Trois echelles : plages, grains, eclats. Position en grille brouillee
-    pour couvrir sans faire de paquets."""
+def granite(seed, ramp, mica=None, quartz=None):
+    """Three scales: patches, grains, flecks. Placed on a jittered grid so
+    they cover without clumping."""
+    mica, quartz = mica or MICA, quartz or QUARTZ
     rnd = random.Random(seed)
     res = []
-    # la densite varie d'un endroit a l'autre : la roche n'est pas reguliere
-    nids = [(rnd.uniform(12, 84), rnd.uniform(12, 84), rnd.uniform(14, 26)) for _ in range(6)]
-    def densite(x, y):
+    # the density varies from place to place: rock is not regular
+    nests = [(rnd.uniform(12, 84), rnd.uniform(12, 84), rnd.uniform(14, 26)) for _ in range(6)]
+    def density(x, y):
         k = 0.0
-        for nx, ny, nr in nids:
+        for nx, ny, nr in nests:
             dd = math.hypot(x - nx, y - ny) / nr
             if dd < 1.0:
                 k += (1.0 - dd) ** 2
         return min(1.0, k)
-    for cols, rmin, rmax, kind, taux in ((9, 2.4, 4.3, "plage", 0.78),
+    for cols, rmin, rmax, kind, rate in ((9, 2.4, 4.3, "patch", 0.78),
                                          (19, 0.75, 1.7, "grain", 0.70),
-                                         (28, 0.26, 0.62, "eclat", 0.52)):
+                                         (28, 0.26, 0.62, "fleck", 0.52)):
         step = 86.0 / cols
         for gy in range(cols):
             for gx in range(cols):
                 cx = 7.0 + (gx + rnd.uniform(0.05, 0.95)) * step
                 cy = 7.0 + (gy + rnd.uniform(0.05, 0.95)) * step
-                if rnd.random() > taux * (0.45 + 0.85 * densite(cx, cy)):
+                if rnd.random() > rate * (0.45 + 0.85 * density(cx, cy)):
                     continue
                 r = rnd.uniform(rmin, rmax)
                 b = base_index(cx, cy)
-                if kind == "plage":
+                if kind == "patch":
                     c = ramp[max(0, min(len(ramp) - 1, b + rnd.choice((-1, -1, 1, 1))))]
                 elif kind == "grain":
                     c = ramp[max(0, min(len(ramp) - 1, b + rnd.choice((-2, -1, -1, 1, 1, 2))))]
                 else:
                     u = rnd.random()
                     if u < 0.42:
-                        c = MICA[rnd.randint(0, 1)]
+                        c = mica[rnd.randint(0, 1)]
                     elif u < 0.72:
-                        c = QUARTZ[rnd.randint(0, 1)]
+                        c = quartz[rnd.randint(0, 1)]
                     else:
                         c = ramp[max(0, min(len(ramp) - 1, b + rnd.choice((-2, 2))))]
                 res.append((fleck(rnd, cx, cy, r), c))
@@ -398,14 +353,14 @@ def ribbon(ps, w, shift=0.0):
 
 # ---------------------------------------------------------------- fractures
 def fractures(seed):
-    """Cassures en travers du clivage. Longueurs, largeurs et contrastes
-    tous differents : une cassure reguliere se lit comme un trait dessine.
-    Une levre est a l'ombre, l'autre au jour."""
+    """Breaks running across the cleavage. Lengths, widths and contrasts
+    all different: a regular break reads as a drawn line. One lip is in
+    shadow, the other in the light."""
     rnd = random.Random(seed)
-    zones = (                       # (x0, x1, y0, y1, direction en travers)
-        (SL + 3, SR - 2, 16, 84, (1.0, 0.15)),          # jambage : lames verticales
-        (SR + 2, ARM_X - 8, 14, 44, (4.0, 7.0)),        # branche haute
-        (SR + 2, LEG_X - 8, 50, 86, (5.0, -8.0)),       # branche basse
+    zones = (                       # (x0, x1, y0, y1, direction across)
+        (SL + 3, SR - 2, 16, 84, (1.0, 0.15)),          # stem: vertical blades
+        (SR + 2, ARM_X - 8, 14, 44, (4.0, 7.0)),        # upper arm
+        (SR + 2, LEG_X - 8, 50, 86, (5.0, -8.0)),       # lower arm
     )
     out = []
     for x0, x1, y0, y1, d in zones:
@@ -421,53 +376,56 @@ def fractures(seed):
                 o = rnd.uniform(-0.9, 0.9) if i < n else 0.0
                 ps.append((p0[0] + u[0] * L * t - u[1] * o, p0[1] + u[1] * L * t + u[0] * o))
             w = rnd.uniform(0.11, 0.3)
-            clair = rnd.random() < 0.6        # toutes ne prennent pas la lumiere
-            out.append((ps, w, clair))
+            lit = rnd.random() < 0.6          # not all of them catch the light
+            out.append((ps, w, lit))
     return out
 
-def fracture(ps, w, clair):
-    r = [(ribbon(ps, [w * 1.7] * len(ps)), FRACT["dark"])]
-    if clair:
-        r.append((ribbon(ps, [w] * len(ps), w * 0.8), FRACT["light"]))
+def fracture(ps, w, lit, fract=None):
+    fract = fract or FRACT
+    r = [(ribbon(ps, [w * 1.7] * len(ps)), fract["dark"])]
+    if lit:
+        r.append((ribbon(ps, [w] * len(ps), w * 0.8), fract["light"]))
     return r
 
-# -------------------------------------------------------------- la fente
-# Une cassure n'a pas deux levres paralleles, ni une largeur reguliere,
-# ni un reflet continu. Tout ici est irregulier a la petite echelle :
-# le trace divague, chaque levre a sa propre derive, la largeur pince et
-# gonfle, le filet de lumiere est intermittent, et des eclats manquent
-# sur les bords.
+# -------------------------------------------------------- the open crack
+# A break has neither parallel lips, nor an even width, nor a continuous
+# highlight. Everything here is irregular at the small scale: the path
+# wanders, each lip drifts on its own, the width pinches and swells, the
+# thread of light is intermittent, and chips are missing along the edges.
+#
+# This is the version the drawing moved away from — the filled seam below
+# is what ships. It is kept because draw.py can still render it.
 VEIN_STEM = [(17.0, 84.0), (23.0, 69.0), (19.0, 56.0), (25.0, 43.5), (21.0, 29.0), (23.5, 14.0)]
 VEIN_ARM  = [(25.0, 43.5), (39.0, 39.0), (54.0, 30.5), (68.0, 23.0), (81.0, 17.0)]
 W_STEM = [0.0, 1.45, 1.05, 1.5, 0.95, 0.0]
 W_ARM  = [1.5, 1.35, 1.2, 0.9, 0.0]
 
-def ribbon2(ps, gauche, droite):
-    """Ruban dont les deux levres sont independantes."""
+def ribbon2(ps, left, right):
+    """A ribbon whose two lips are independent."""
     n = len(ps)
     nor = [(lambda u: (-u[1], u[0]))(unit(sub(ps[min(i + 1, n - 1)], ps[max(i - 1, 0)]))) for i in range(n)]
-    a = [(ps[i][0] + nor[i][0] * gauche[i], ps[i][1] + nor[i][1] * gauche[i]) for i in range(n)]
-    b = [(ps[i][0] - nor[i][0] * droite[i], ps[i][1] - nor[i][1] * droite[i]) for i in range(n)]
+    a = [(ps[i][0] + nor[i][0] * left[i], ps[i][1] + nor[i][1] * left[i]) for i in range(n)]
+    b = [(ps[i][0] - nor[i][0] * right[i], ps[i][1] - nor[i][1] * right[i]) for i in range(n)]
     return a + b[::-1]
 
-def bruit(n, rnd, amp, lissage=4):
-    """Bruit lisse. Un bruit decorrele d'un point au suivant donne des
-    dents de scie ; une cassure, elle, derive lentement."""
+def noise(n, rnd, amp, smoothing=4):
+    """Smoothed noise. Noise uncorrelated from one point to the next gives
+    saw teeth; a fracture, by contrast, drifts slowly."""
     v = [rnd.uniform(-1.0, 1.0) for _ in range(n)]
-    for _ in range(lissage):
+    for _ in range(smoothing):
         v = [(v[max(i - 1, 0)] + 2.0 * v[i] + v[min(i + 1, n - 1)]) / 4.0 for i in range(n)]
     m = max(1e-6, max(abs(x) for x in v))
     return [x / m * amp for x in v]
 
-def densifie(ps, ws, pas, amp, rnd):
-    """Reechantillonne le trace et le fait divaguer. Renvoie les points
-    et la largeur de base interpolee en chacun d'eux."""
+def densify(ps, ws, step, amp, rnd):
+    """Resamples the path and makes it wander. Returns the points and the
+    base width interpolated at each of them."""
     pts_, wid, nrm = [], [], []
     for i in range(len(ps) - 1):
         p0, p1 = ps[i], ps[i + 1]
         d = sub(p1, p0)
         L = math.hypot(*d)
-        k = max(1, int(L / pas))
+        k = max(1, int(L / step))
         u = unit(d); nn = (-u[1], u[0])
         for j in range(k):
             t = j / k
@@ -475,14 +433,14 @@ def densifie(ps, ws, pas, amp, rnd):
             nrm.append(nn)
             wid.append(ws[i] + (ws[i + 1] - ws[i]) * t)
     pts_.append(ps[-1]); nrm.append(nrm[-1]); wid.append(ws[-1])
-    o = bruit(len(pts_), rnd, amp)
+    o = noise(len(pts_), rnd, amp)
     pts_ = [(p[0] + n_[0] * o[i], p[1] + n_[1] * o[i])
             for i, (p, n_) in enumerate(zip(pts_, nrm))]
     return pts_, wid
 
-def _tronçons(n, rnd, lmin, lmax, gmin, gmax):
-    """Decoupe [0,n[ en morceaux separes par des trous : un reflet reel
-    n'est jamais continu."""
+def _runs(n, rnd, lmin, lmax, gmin, gmax):
+    """Cuts [0,n[ into stretches separated by gaps: a real highlight is
+    never continuous."""
     out, i = [], rnd.randint(0, gmax)
     while i < n - 2:
         j = min(n - 1, i + rnd.randint(lmin, lmax))
@@ -491,58 +449,58 @@ def _tronçons(n, rnd, lmin, lmax, gmin, gmax):
         i = j + rnd.randint(gmin, gmax)
     return out
 
-def fente(seed):
-    """Tous les morceaux de la cassure, dans l'ordre de pose."""
+def open_crack(seed, tints=None):
+    """Every piece of the break, in painting order."""
+    T = tints or SEAM
     rnd = random.Random(seed)
     out = []
     traces = []
     for ps, ws in ((VEIN_STEM, W_STEM), (VEIN_ARM, W_ARM)):
-        P, W = densifie(ps, ws, 1.7, 0.32, rnd)
+        P, W = densify(ps, ws, 1.7, 0.32, rnd)
         n = len(P)
-        # la largeur pince et gonfle, et les deux levres sont decorrelees
-        bg, bd = bruit(n, rnd, 0.42), bruit(n, rnd, 0.42)
-        g = [max(0.0, W[i] * (1.0 + bg[i]) * 0.92) for i in range(n)]
-        d = [max(0.0, W[i] * (1.0 + bd[i]) * 0.92) for i in range(n)]
+        # the width pinches and swells, and the two lips are uncorrelated
+        bl, br_ = noise(n, rnd, 0.42), noise(n, rnd, 0.42)
+        g = [max(0.0, W[i] * (1.0 + bl[i]) * 0.92) for i in range(n)]
+        d = [max(0.0, W[i] * (1.0 + br_[i]) * 0.92) for i in range(n)]
         traces.append((P, W, g, d))
 
-        out.append((ribbon2(P, g, d), SEAM["creux"]))
-        # le fond n'est pas uniforme : par endroits la cassure est plus
-        # profonde. Toujours sombre, jamais clair : c'est ce qui garde
-        # la continuite du trait.
-        for idx in _tronçons(n, rnd, 2, 6, 1, 4):
+        out.append((ribbon2(P, g, d), T["hollow"]))
+        # the floor is not uniform: in places the break runs deeper.
+        # Always dark, never pale: that is what keeps the line continuous.
+        for idx in _runs(n, rnd, 2, 6, 1, 4):
             k = [max(0.0, g[i] * rnd.uniform(0.25, 0.6)) for i in idx]
             l = [max(0.0, d[i] * rnd.uniform(0.25, 0.6)) for i in idx]
-            out.append((ribbon2([P[i] for i in idx], k, l), SEAM["fond"]))
-        # la paroi aval prend la lumiere, par plages. Elle reste du cote
-        # aval : le creux ne doit jamais etre recouvert de part en part.
-        for idx in _tronçons(n, rnd, 3, 9, 1, 3):
+            out.append((ribbon2([P[i] for i in idx], k, l), T["floor"]))
+        # the far wall catches the light, in stretches. It stays on the far
+        # side: the hollow must never be covered right across.
+        for idx in _runs(n, rnd, 3, 9, 1, 3):
             k = [d[i] * rnd.uniform(-0.45, -0.25) for i in idx]
             l = [d[i] * rnd.uniform(0.8, 1.05) for i in idx]
-            out.append((ribbon2([P[i] for i in idx], k, l), SEAM["aval"]))
-        # le filet sur la levre amont : intermittent, et d'epaisseur variable
-        for idx in _tronçons(n, rnd, 2, 7, 1, 5):
+            out.append((ribbon2([P[i] for i in idx], k, l), T["far_wall"]))
+        # the thread along the near lip: intermittent, and uneven in width
+        for idx in _runs(n, rnd, 2, 7, 1, 5):
             k = [g[i] * rnd.uniform(1.0, 1.35) for i in idx]
             l = [-g[i] * rnd.uniform(0.55, 0.85) for i in idx]
-            out.append((ribbon2([P[i] for i in idx], k, l), SEAM["levre"]))
-        # eclats manquants sur les levres
+            out.append((ribbon2([P[i] for i in idx], k, l), T["lip"]))
+        # chips missing from the lips
         for _ in range(int(n * 0.11)):
             i = rnd.randrange(n)
             if W[i] < 0.5:
                 continue
             u = unit(sub(P[min(i + 1, n - 1)], P[max(i - 1, 0)])); nn = (-u[1], u[0])
-            sens = rnd.choice((1.0, -1.0))
-            e = (g[i] if sens > 0 else -d[i]) * rnd.uniform(0.8, 1.3)
+            side = rnd.choice((1.0, -1.0))
+            e = (g[i] if side > 0 else -d[i]) * rnd.uniform(0.8, 1.3)
             out.append((fleck(rnd, P[i][0] + nn[0] * e, P[i][1] + nn[1] * e,
                               rnd.uniform(0.2, 0.48)),
-                        SEAM["creux"] if rnd.random() < 0.7 else SEAM["fond"]))
-        # fissures secondaires : de courts departs, qui s'eteignent
+                        T["hollow"] if rnd.random() < 0.7 else T["floor"]))
+        # secondary cracks: short starts, which die out
         for _ in range(4):
             i = rnd.randrange(2, n - 2)
             u = unit(sub(P[i + 1], P[i - 1])); nn = (-u[1], u[0])
-            sens = rnd.choice((1.0, -1.0))
+            side = rnd.choice((1.0, -1.0))
             L = rnd.uniform(3.5, 11.0)
-            dirn = unit((nn[0] * sens + u[0] * rnd.uniform(-0.8, 0.8),
-                         nn[1] * sens + u[1] * rnd.uniform(-0.8, 0.8)))
+            dirn = unit((nn[0] * side + u[0] * rnd.uniform(-0.8, 0.8),
+                         nn[1] * side + u[1] * rnd.uniform(-0.8, 0.8)))
             br = [P[i]]
             for j in range(1, 5):
                 t = j / 4
@@ -551,74 +509,88 @@ def fente(seed):
                            P[i][1] + dirn[1] * L * t + dirn[0] * o))
             w0 = min(0.42, W[i] * 0.45)
             ws_ = [w0 * (1 - j / 4) ** 0.7 for j in range(5)]
-            out.append((ribbon2(br, ws_, ws_), SEAM["creux"]))
+            out.append((ribbon2(br, ws_, ws_), T["hollow"]))
             if rnd.random() < 0.5:
                 h = [x * 0.45 for x in ws_]
-                out.append((ribbon2(br, [-x * 0.3 for x in ws_], h), SEAM["aval"]))
+                out.append((ribbon2(br, [-x * 0.3 for x in ws_], h), T["far_wall"]))
     return out, traces
 
-# ------------------------------------------------------------- la resine
-# Variante : la fente n'est pas un vide, elle est COMBLEE. Une resine
-# — en mineralogie, un filon secondaire qui colmate la fracture.
+# ----------------------------------------------------------- the resin
+# The shipped version: the crack is not a void, it is FILLED. A resin —
+# in mineralogy, a secondary vein sealing the fracture.
 #
-# Ce qui fait lire « rempli » plutot que « casse », c'est la continuite :
-# un menisque lisse et ininterrompu le long de la levre amont, des bords
-# nets et paralleles, aucun eclat manquant. La matiere est translucide,
-# donc le grain de la pierre transparait au travers — d'ou fill-opacity
-# plutot qu'un aplat.
+# What makes it read "filled" rather than "broken" is continuity: a
+# smooth, unbroken meniscus along the near lip, clean parallel edges, no
+# missing chips. The material is translucent, so the grain of the stone
+# shows through — hence fill-opacity rather than a flat fill.
 #
-# Deux dosages : laiteuse (on voit tout de suite que c'est rempli) ou
-# transparente (plus minerale, plus discrete).
-RESINE_CLAIRE = {
-    "levre_pierre": ("#12305F", 0.64),   # l'ancienne arete de cassure, dessous
-    "corps":        ("#9CC6F4", 0.60),   # la resine elle-meme
-    "coeur":        ("#7FB3EE", 0.42),   # plus epaisse au milieu du chenal
-    "menisque":     ("#F2F8FF", 0.97),   # le bourrelet qui prend la lumiere
-    "reflet":       ("#C6DFFA", 0.32),   # retour de lumiere sur l'autre bord
-    "bulle_claire": ("#F7FBFF", 0.9),
-    "bulle_sombre": ("#285AA6", 0.55),
+# Two doses: milky (you see at once that it is filled) or mineral (more
+# discreet, more stone-like).
+RESIN_MILKY = {
+    "stone_lip":   ("#12305F", 0.64),   # the old break edge, underneath
+    "body":        ("#9CC6F4", 0.60),   # the resin itself
+    "core":        ("#7FB3EE", 0.42),   # thicker in the middle of the channel
+    "meniscus":    ("#F2F8FF", 0.97),   # the bead that catches the light
+    "sheen":       ("#C6DFFA", 0.32),   # light coming back off the other edge
+    "bubble_pale": ("#F7FBFF", 0.9),
+    "bubble_dark": ("#285AA6", 0.55),
 }
-RESINE_SOMBRE = {
-    "levre_pierre": ("#12305F", 0.6),
-    "corps":        ("#2B5EAE", 0.72),
-    "coeur":        ("#1C4080", 0.45),
-    "menisque":     ("#CFE4FC", 0.92),
-    "reflet":       ("#6CA2E8", 0.3),
-    "bulle_claire": ("#DCEBFE", 0.85),
-    "bulle_sombre": ("#13336A", 0.6),
+RESIN_MINERAL = {
+    "stone_lip":   ("#12305F", 0.6),
+    "body":        ("#2B5EAE", 0.72),
+    "core":        ("#1C4080", 0.45),
+    "meniscus":    ("#CFE4FC", 0.92),
+    "sheen":       ("#6CA2E8", 0.3),
+    "bubble_pale": ("#DCEBFE", 0.85),
+    "bubble_dark": ("#13336A", 0.6),
 }
 
-def resine(seed, teintes):
-    """Les morceaux du filon comble. Renvoie (polygone, teinte, opacite)."""
+# On a light ground the stone is darker, so the resin does not need to
+# be as pale to read as filled — and it must NOT be near-white: a white
+# thread inside the mass would read as a gap punched through to the page,
+# which is the one thing the filled seam exists to deny. The meniscus
+# stops at 1.32:1 against white.
+RESIN_ON_LIGHT = {
+    "stone_lip":   ("#091B3C", 0.66),
+    "body":        ("#7FAEE4", 0.58),
+    "core":        ("#5E90D4", 0.44),
+    "meniscus":    ("#DCE9FA", 0.95),
+    "sheen":       ("#9CC0EC", 0.32),
+    "bubble_pale": ("#EAF2FD", 0.88),
+    "bubble_dark": ("#16305E", 0.55),
+}
+
+def resin(seed, tints):
+    """The pieces of the filled vein. Returns (polygon, tint, opacity)."""
     rnd = random.Random(seed)
     out, traces = [], []
-    T = teintes
+    T = tints
     for ps, ws in ((VEIN_STEM, W_STEM), (VEIN_ARM, W_ARM)):
-        # Moins de derive que pour une cassure ouverte : la resine epouse
-        # la fracture mais sa surface, elle, est lisse.
-        P, W = densifie(ps, ws, 1.7, 0.26, rnd)
+        # Less drift than for an open break: the resin follows the
+        # fracture, but its own surface is smooth.
+        P, W = densify(ps, ws, 1.7, 0.26, rnd)
         n = len(P)
-        bg, bd = bruit(n, rnd, 0.2), bruit(n, rnd, 0.2)
-        g = [max(0.0, W[i] * (1.0 + bg[i]) * 0.94) for i in range(n)]
-        d = [max(0.0, W[i] * (1.0 + bd[i]) * 0.94) for i in range(n)]
+        bl, br_ = noise(n, rnd, 0.2), noise(n, rnd, 0.2)
+        g = [max(0.0, W[i] * (1.0 + bl[i]) * 0.94) for i in range(n)]
+        d = [max(0.0, W[i] * (1.0 + br_[i]) * 0.94) for i in range(n)]
         traces.append((P, W, g, d))
 
-        # la levre de pierre, sous la resine : la fracture reste lisible,
-        # et ce liseré sombre pose le filon dans la pierre au lieu de le
-        # faire flotter dessus
-        out.append((ribbon2(P, [x * 1.22 for x in g], [x * 1.22 for x in d]),) + T["levre_pierre"])
-        # le corps, translucide : le grain transparait
-        out.append((ribbon2(P, g, d),) + T["corps"])
-        # plus epaisse au milieu du chenal
-        out.append((ribbon2(P, [x * 0.52 for x in g], [x * 0.52 for x in d]),) + T["coeur"])
-        # Le menisque : la remontee de la resine contre la paroi. C'est
-        # lui qui dit « rempli » — parce qu'il est CONTINU, la ou une
-        # arete de cassure donne un reflet hache. Il doit rester un
-        # filet : large, il bave des les petites tailles.
-        out.append((ribbon2(P, [x * 1.06 for x in g], [-x * 0.58 for x in g]),) + T["menisque"])
-        # retour de lumiere sur le bord aval, plus discret
-        out.append((ribbon2(P, [-x * 0.46 for x in d], [x * 1.0 for x in d]),) + T["reflet"])
-        # bulles prises dans la resine
+        # the stone lip, under the resin: the fracture stays legible, and
+        # this dark edging sets the vein *in* the stone instead of leaving
+        # it floating on top
+        out.append((ribbon2(P, [x * 1.22 for x in g], [x * 1.22 for x in d]),) + T["stone_lip"])
+        # the body, translucent: the grain shows through
+        out.append((ribbon2(P, g, d),) + T["body"])
+        # thicker in the middle of the channel
+        out.append((ribbon2(P, [x * 0.52 for x in g], [x * 0.52 for x in d]),) + T["core"])
+        # The meniscus: the resin climbing against the wall. This is what
+        # says "filled" — because it is CONTINUOUS, where a break edge
+        # gives a choppy highlight. It must stay a thread: wide, it bleeds
+        # as soon as the size comes down.
+        out.append((ribbon2(P, [x * 1.06 for x in g], [-x * 0.58 for x in g]),) + T["meniscus"])
+        # light coming back off the far edge, more discreet
+        out.append((ribbon2(P, [-x * 0.46 for x in d], [x * 1.0 for x in d]),) + T["sheen"])
+        # bubbles caught in the resin
         for _ in range(int(n * 0.55)):
             i = rnd.randrange(n)
             if W[i] < 0.35:
@@ -626,17 +598,17 @@ def resine(seed, teintes):
             u = unit(sub(P[min(i + 1, n - 1)], P[max(i - 1, 0)])); nn = (-u[1], u[0])
             o = rnd.uniform(-g[i] * 0.6, d[i] * 0.6)
             r = rnd.uniform(0.1, 0.3) * (0.5 + W[i])
-            cle = "bulle_claire" if rnd.random() < 0.62 else "bulle_sombre"
+            key = "bubble_pale" if rnd.random() < 0.62 else "bubble_dark"
             out.append((fleck(rnd, P[i][0] + nn[0] * o + u[0] * rnd.uniform(-0.6, 0.6),
-                              P[i][1] + nn[1] * o + u[1] * rnd.uniform(-0.6, 0.6), r),) + T[cle])
-        # fissures secondaires, comblees elles aussi
+                              P[i][1] + nn[1] * o + u[1] * rnd.uniform(-0.6, 0.6), r),) + T[key])
+        # secondary cracks, sealed as well
         for _ in range(4):
             i = rnd.randrange(2, n - 2)
             u = unit(sub(P[i + 1], P[i - 1])); nn = (-u[1], u[0])
-            sens = rnd.choice((1.0, -1.0))
+            side = rnd.choice((1.0, -1.0))
             L = rnd.uniform(3.5, 10.0)
-            dirn = unit((nn[0] * sens + u[0] * rnd.uniform(-0.7, 0.7),
-                         nn[1] * sens + u[1] * rnd.uniform(-0.7, 0.7)))
+            dirn = unit((nn[0] * side + u[0] * rnd.uniform(-0.7, 0.7),
+                         nn[1] * side + u[1] * rnd.uniform(-0.7, 0.7)))
             br = [P[i]]
             for j in range(1, 5):
                 t = j / 4
@@ -645,67 +617,57 @@ def resine(seed, teintes):
                            P[i][1] + dirn[1] * L * t + dirn[0] * o))
             w0 = min(0.4, W[i] * 0.42)
             ws_ = [w0 * (1 - j / 4) ** 0.7 for j in range(5)]
-            out.append((ribbon2(br, ws_, ws_),) + T["corps"])
-            out.append((ribbon2(br, [x * 0.9 for x in ws_], [-x * 0.4 for x in ws_]),) + T["menisque"])
+            out.append((ribbon2(br, ws_, ws_),) + T["body"])
+            out.append((ribbon2(br, [x * 0.9 for x in ws_], [-x * 0.4 for x in ws_]),) + T["meniscus"])
     return out, traces
 
-# ------------------------------------------------------------------- sortie
+# ------------------------------------------------------------------- output
 def n_(v):
     s = f"{v:.1f}".rstrip("0").rstrip("."); return s if s else "0"
 def pts(s): return " ".join(f"{n_(x)},{n_(y)}" for x, y in s)
 OUTER = chamfer(OUTLINE)
 
-def build(title, ramp, bev, seed, vein):
-    L = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"',
-         '     role="img" aria-label="Kyanite">',
-         f'  <title>Kyanite — {title}</title>', '',
-         '  <defs>',
-         f'    <clipPath id="bloc"><polygon points="{pts(OUTER)}"/></clipPath>',
-         f'    <clipPath id="jambage"><polygon points="{pts(BAND_STEM)}"/></clipPath>',
-         f'    <clipPath id="haute"><polygon points="{pts(BAND_ARM)}"/></clipPath>',
-         f'    <clipPath id="basse"><polygon points="{pts(BAND_LEG)}"/></clipPath>',
-         '  </defs>', '',
-         '  <g clip-path="url(#bloc)">',
-         f'    <polygon points="{pts(OUTER)}" fill="{ramp[4]}"/>', '']
-    for cid, nom, bl in (("jambage", "jambage", blades_stem(ramp)),
-                         ("haute", "branche haute", blades_axis(ARM_A, ARM_D, ARM_S, ARM_V, ramp)),
-                         ("basse", "branche basse", blades_axis(LEG_A, LEG_D, LEG_S, LEG_V, ramp))):
-        L.append(f'    <!-- {nom} : lames de kyanite -->')
-        L.append(f'    <g clip-path="url(#{cid})">')
-        for poly, c in bl:
-            L.append(f'      <polygon points="{pts(poly)}" fill="{c}"/>')
-        L.append('    </g>')
-    L += ['', '    <!-- grain : plages, grains, eclats de quartz et points de mica -->', '    <g>']
-    for poly, c in granite(seed, ramp):
-        L.append(f'      <polygon points="{pts(poly)}" fill="{c}"/>')
-    L.append('    </g>')
-    L += ['', '    <!-- fractures en travers du clivage -->']
-    for ps, w in FRACTURES:
-        for poly, c in fracture(ps, w):
-            L.append(f'    <polygon points="{pts(poly)}" fill="{c}"/>')
-    if vein:
-        L += ['', "    <!-- filon : la paroi a l'ombre, puis le coeur clair -->"]
-        for seq, w in ((VEIN_STEM, W_STEM), (VEIN_ARM, W_ARM)):
-            L.append(f'    <polygon points="{pts(ribbon(seq, [x * 1.45 for x in w]))}" fill="{SEAM["wall"]}"/>')
-            L.append(f'    <polygon points="{pts(ribbon(seq, [x * 1.15 for x in w], 0.4))}" fill="{SEAM["halo"]}"/>')
-            L.append(f'    <polygon points="{pts(ribbon(seq, [x * 0.8 for x in w], 0.62))}" fill="{SEAM["core"]}"/>')
-    L += ['', '    <!-- biseau : un pan par arete, une seule lumiere haut-gauche -->']
-    for poly, c in bevel_ring(OUTER, inset(OUTER, BEVEL_W), bev):
-        L.append(f'    <polygon points="{pts(poly)}" fill="{c}"/>')
-    L += ['  </g>', '</svg>']
-    return "\n".join(L) + "\n"
+# ------------------------------------------------------------- the themes
+# Everything the drawing needs to know about its ground, in one place.
+# The geometry is shared: only the values change.
+ON_DARK = {
+    "name": "dark", "ground": GROUND, "rock": ROCK_DEEP, "bevel": BEVEL_HARD,
+    "mica": MICA, "quartz": QUARTZ, "fract": FRACT, "resin": RESIN_MILKY,
+    "crack": SEAM, "spangle": SPANGLE,
+    "clear": PLANE_CLEAR, "shade": PLANE_SHADE,
+    "icon_stone": ICON_STONE, "icon_seam": ICON_SEAM, "ink": INK,
+}
+ON_LIGHT = {
+    "name": "light", "ground": GROUND_LIGHT, "rock": ROCK_LIGHT,
+    "bevel": BEVEL_LIGHT, "mica": MICA_LIGHT, "quartz": QUARTZ_LIGHT,
+    "fract": FRACT_LIGHT, "resin": RESIN_ON_LIGHT, "crack": SEAM,
+    "spangle": SPANGLE_LIGHT,
+    "clear": PLANE_CLEAR_LIGHT, "shade": PLANE_SHADE_LIGHT,
+    "icon_stone": ICON_STONE_LIGHT, "icon_seam": ICON_SEAM_LIGHT,
+    "ink": INK_LIGHT,
+}
+THEMES = {"dark": ON_DARK, "light": ON_LIGHT}
 
-if __name__ == "__main__":
-    VARIANTS = [
-        ("variante-i-granite", "I — granite", ROCK, BEVEL, 20260, False),
-        ("variante-j-filon", "J — granite + filon", ROCK, BEVEL, 20260, True),
-        ("variante-k-mine", "K — fond de mine", ROCK_DEEP, BEVEL_HARD, 81177, True),
-    ]
-    os.makedirs(OUT, exist_ok=True)
-    for f in os.listdir(OUT):
-        if f.startswith("variante-"):
-            os.remove(os.path.join(OUT, f))
-    for slug, title, r, b, s, v in VARIANTS:
-        p = os.path.join(OUT, slug + ".svg")
-        open(p, "w").write(build(title, r, b, s, v))
-        print(f"ecrit {slug}  {os.path.getsize(p)//1024} Ko")
+def luminance(hex_):
+    c = [int(hex_[i:i + 2], 16) / 255.0 for i in (1, 3, 5)]
+    c = [x / 12.92 if x <= 0.04045 else ((x + 0.055) / 1.055) ** 2.4 for x in c]
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
+
+def contrast(a, b):
+    la, lb = luminance(a), luminance(b)
+    hi, lo = max(la, lb), min(la, lb)
+    return (hi + 0.05) / (lo + 0.05)
+
+def check_ground(theme, floor=3.0):
+    """The keen lit edge is what draws the contour, so it is the one value
+    that may never melt into the ground. Measured, not assumed: this is
+    exactly the check the dark palette fails on white (1.21:1).
+
+    The deepest facet is deliberately NOT checked. On a dark ground it is
+    meant to sink into the background — that is the shadow side doing its
+    job — and on a light ground it is the strongest edge there is."""
+    keen = theme["bevel"][-1]
+    got = contrast(keen, theme["ground"])
+    assert got >= floor, (f'theme "{theme["name"]}": the keen edge {keen} gives only '
+                          f"{got:.2f}:1 on {theme['ground']}, below {floor}:1")
+    return got

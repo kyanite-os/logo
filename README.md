@@ -1,15 +1,24 @@
-# Le logo de Kyanite
+# The Kyanite logo
 
-[Kyanite](https://github.com/kyanite-os) est une image Linux immuable fondée sur Fedora bootc, avec KDE Plasma : minimale et durcie.
+[Kyanite](https://github.com/kyanite-os) is an immutable Linux image built on Fedora bootc, with KDE Plasma: minimal and hardened.
 
-Son logo est un **K taillé dans un bloc de kyanite** , le minéral bleu dont le projet tire son nom, qui pousse en cristaux allongés en lames. Une fracture le traverse, comblée d'un filon clair : la pierre n'est pas cassée, elle est scellée.
+Its logo is a **K cut from a block of kyanite**, the blue mineral the project is named after, which grows in long bladed crystals. A fracture runs across it, filled with a pale vein: the stone is not broken, it is sealed.
 
-![Le logo Kyanite](logo/png/banniere.png)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="logo/png/banner.png">
+  <source media="(prefers-color-scheme: light)" srcset="logo/png/banner-light.png">
+  <img alt="The Kyanite logo" src="logo/png/banner.png">
+</picture>
 
 | | |
 |---|---|
-| [`logo/`](logo/) | Les livrables, et comment s'en servir. |
-| [`outils/`](outils/) | Les scripts qui les écrivent. |
-| [`NOTES.md`](NOTES.md) | Le journal de conception : pourquoi le dessin est ce qu'il est. |
+| [`logo/`](logo/) | The deliverables, and how to use them. |
+| [`tools/`](tools/) | The scripts that write them. |
+| [`NOTES.md`](NOTES.md) | The design journal: why the drawing is what it is. |
+| [`LICENSE`](LICENSE) | What you may and may not do with the mark. |
 
-Le code de Kyanite est sous licence libre. **Le nom et ce logo ne le sont pas** : voir [`logo/README.md`](logo/README.md#nom-et-logo).
+It comes in two grounds — one for dark backgrounds, one for light — because a single
+drawing cannot do both: the edge that carries the contour on one ground disappears on
+the other. See [`logo/README.md`](logo/README.md#which-ground).
+
+Kyanite's code is free software. **The name and this logo are not**: see [`LICENSE`](LICENSE).

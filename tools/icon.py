@@ -1,130 +1,131 @@
 #!/usr/bin/env python3
-"""kyanite-icon.svg — la version pour petites tailles.
+"""kyanite-icon.svg — the version for small sizes.
 
-Meme silhouette que le logo complet, et rien d'autre : pas de grain,
-pas de lamelles, pas de fractures, pas de plans translucides, pas de
-paillettes. En dessous de 64 px tout cela ne fait plus que du bruit.
+Same silhouette as the full logo, and nothing else: no grain, no
+lamellae, no fractures, no translucent planes, no spangles. Below
+64 px all of that is just noise.
 
-Restent la silhouette, le contraste entre les trois traits, et la
-fente comblee — cette derniere disparait a 16 px, elle ne revient
-qu'a partir de 22. Le biseau est elargi de
-3 a 5 pour qu'il pese encore un demi-pixel a 16 px.
+What remains is the silhouette, the contrast between the three strokes,
+and the filled seam — that last one disappears at 16 px and only comes
+back from 22 up. The bevel is widened from 3 to 5 so that it still
+carries half a pixel at 16 px.
 """
 import os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import bloc as G
+import block as G
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "logo")
 
-# Contour simplifie : on retire les decrochements des aretes longues,
-# invisibles sous 64 px et couteux en sommets. Les coupes d'angle, le
-# sommet oblique et le gradin du pied restent : c'est l'identite du mark.
-CONTOUR = [
-    ((G.SL, 17.0),           (7.0, 8.0)),   # coin haut-gauche
-    ((G.SR, G.TOP),          (4.5, 4.0)),   # haut du jambage, coupe nette
-    ((G.SR, G.ARM_Y0),       (4.0, 5.0)),   # fond de l'encoche haute
+# Simplified outline: we drop the jogs along the long edges, invisible
+# below 64 px and costly in vertices. The chamfers, the oblique top and
+# the stepped foot stay: that is the identity of the mark.
+OUTLINE = [
+    ((G.SL, 17.0),           (7.0, 8.0)),   # top-left corner
+    ((G.SR, G.TOP),          (4.5, 4.0)),   # top of the stem, clean cut
+    ((G.SR, G.ARM_Y0),       (4.0, 5.0)),   # bottom of the upper notch
     ((G.X_ARM_TOP, G.TOP),   (6.0, 5.0)),
-    ((G.ARM_X, G.TOP),       (5.0, 3.5)),   # coin haut-droit
-    ((G.ARM_X, G.Y_ARM_TIP), (3.5, 6.0)),   # tranchant haut
-    ((G.SR, G.FORK),         (7.0, 6.0)),   # la fourche
-    ((G.LEG_X, G.Y_LEG_TIP), (5.0, 3.0)),   # tranchant bas
-    ((G.LEG_X, G.BOT),       (3.0, 5.0)),   # coin bas-droit
+    ((G.ARM_X, G.TOP),       (5.0, 3.5)),   # top-right corner
+    ((G.ARM_X, G.Y_ARM_TIP), (3.5, 6.0)),   # upper blade edge
+    ((G.SR, G.FORK),         (7.0, 6.0)),   # the fork
+    ((G.LEG_X, G.Y_LEG_TIP), (5.0, 3.0)),   # lower blade edge
+    ((G.LEG_X, G.BOT),       (3.0, 5.0)),   # bottom-right corner
     ((G.X_LEG_BOT, G.BOT),   (5.0, 4.0)),
-    ((G.SR, G.LEG_Y1),       (4.0, 2.0)),   # fond de l'encoche basse
-    ((G.SR, 85.0),           (2.0, 2.0)),   # gradin du pied
+    ((G.SR, G.LEG_Y1),       (4.0, 2.0)),   # bottom of the lower notch
+    ((G.SR, 85.0),           (2.0, 2.0)),   # the stepped foot
     ((26.0, 85.0),           (2.0, 2.0)),
     ((26.0, G.BOT),          (2.0, 2.5)),
-    ((G.SL, G.BOT),          (0.0, 0.0)),   # coin bas-gauche : angle droit
+    ((G.SL, G.BOT),          (0.0, 0.0)),   # bottom-left corner: right angle
 ]
-BISEAU = 5.0
-PIERRE = {"jambage_clair": "#3A74CA", "jambage_ombre": "#234C92",
-          "haute_clair":   "#74ABEE", "haute_ombre":   "#4280D6",
-          "basse_clair":   "#4D8ADA", "basse_ombre":   "#2E60B4"}
-RAMPE = ["#112A58", "#1C4184", "#3A74C8", "#86B7F2", "#DBEBFF"]
-# La fente est COMBLEE, comme dans le logo complet : une resine
-# translucide, et surtout un menisque continu le long de la levre
-# amont. C'est la continuite de ce filet, pas sa couleur, qui fait
-# lire « scelle » plutot que « casse ».
-# Ici les teintes sont aplaties : a 16 px, empiler des opacites ne
-# donne que de la bouillie. La valeur du corps est celle que donne la
-# resine du logo composee sur la pierre.
-FENTE = {"levre_pierre": "#163A74", "corps": "#7CA6E0", "menisque": "#EAF4FF"}
+BEVEL_W = 5.0
+# The tints come from the theme (see block.py). The seam is FILLED here
+# too: a translucent resin, and above all a continuous meniscus along the
+# near lip. It is the continuity of that thread, not its colour, that
+# makes it read "sealed" rather than "broken". The values are flattened
+# for this size — at 16 px, stacking opacities only gives mush — so the
+# body value is the one the full logo's resin produces once composited
+# over the stone.
 
-# La fente, reduite a son trace principal : le jambage puis la branche haute.
-TRACE = [(17.5, 84.0), (23.0, 69.0), (19.5, 56.0), (25.0, 43.5), (21.5, 29.0), (23.5, 14.0)]
-TRACE_BRAS = [(25.0, 43.5), (40.0, 38.5), (56.0, 29.5), (70.0, 21.5), (81.0, 17.0)]
-LARG = [0.0, 1.35, 1.0, 1.4, 0.95, 0.0]
-LARG_BRAS = [1.4, 1.25, 1.1, 0.85, 0.0]
+# The seam, reduced to its main path: the stem, then the upper arm.
+VEIN_STEM = [(17.5, 84.0), (23.0, 69.0), (19.5, 56.0), (25.0, 43.5), (21.5, 29.0), (23.5, 14.0)]
+VEIN_ARM = [(25.0, 43.5), (40.0, 38.5), (56.0, 29.5), (70.0, 21.5), (81.0, 17.0)]
+W_STEM = [0.0, 1.35, 1.0, 1.4, 0.95, 0.0]
+W_ARM = [1.4, 1.25, 1.1, 0.85, 0.0]
 
-SPLIT_JAMBAGE = 21.5
-SPLIT_HAUTE = 32.0
-SPLIT_BASSE = 58.0
-D = 13.0   # debord : tout est recoupe par le masque du contour
+SPLIT_STEM = 21.5
+SPLIT_ARM = 32.0
+SPLIT_LEG = 58.0
+D = 13.0   # overhang: everything is clipped back by the outline mask
 
-def bande_haute(a, b):
+def band_arm(a, b):
     return [(G.SR, a), (G.SR + 7 * D, a - 4 * D), (G.SR + 7 * D, b - 4 * D), (G.SR, b)]
-def bande_basse(a, b):
+def band_leg(a, b):
     return [(G.SR, a), (G.SR + 8 * D, a + 5 * D), (G.SR + 8 * D, b + 5 * D), (G.SR, b)]
-def bande_jambage(a, b):
+def band_stem(a, b):
     return [(a, -5), (b, -5), (b, 105), (a, 105)]
 
-def ecris():
+def write_svg(theme):
+    G.check_ground(theme)
+    STONE, RAMP, SEAM = theme["icon_stone"], theme["bevel"], theme["icon_seam"]
     n, pts = G.n_, G.pts
-    ext = G.chamfer(CONTOUR)
-    arete = G.inset(ext, 1.2)
-    assert not G.verifie(ext, arete), "pan de biseau retourne"
-    dedans = G.inset(arete, BISEAU - 1.2)
-    assert not G.verifie(arete, dedans), "pan de biseau retourne"
-    vif = [RAMPE[0], RAMPE[0], RAMPE[1], RAMPE[4], RAMPE[4]]
+    outer = G.chamfer(OUTLINE)
+    edge = G.inset(outer, 1.2)
+    assert not G.reversed_edges(outer, edge), "bevel facet flipped over"
+    inner = G.inset(edge, BEVEL_W - 1.2)
+    assert not G.reversed_edges(edge, inner), "bevel facet flipped over"
+    keen = [RAMP[0], RAMP[0], RAMP[1], RAMP[4], RAMP[4]]
 
     L = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100"',
          '     role="img" aria-label="Kyanite">',
          '  <title>Kyanite</title>',
-         '  <desc>Un K taillé dans un bloc de kyanite. Version pour petites tailles.</desc>',
+         f'  <desc>A K cut from a block of kyanite. Small-size version,'
+         f' for {theme["name"]} backgrounds.</desc>',
          '',
          '  <defs>',
-         f'    <clipPath id="bloc"><polygon points="{pts(ext)}"/></clipPath>',
-         f'    <clipPath id="jambage"><polygon points="{pts(bande_jambage(-5, G.SR))}"/></clipPath>',
-         f'    <clipPath id="haute"><polygon points="{pts(bande_haute(G.ARM_Y0, G.FORK))}"/></clipPath>',
-         f'    <clipPath id="basse"><polygon points="{pts(bande_basse(G.FORK, G.LEG_Y1))}"/></clipPath>',
+         f'    <clipPath id="clip-block"><polygon points="{pts(outer)}"/></clipPath>',
+         f'    <clipPath id="clip-stem"><polygon points="{pts(band_stem(-5, G.SR))}"/></clipPath>',
+         f'    <clipPath id="clip-arm"><polygon points="{pts(band_arm(G.ARM_Y0, G.FORK))}"/></clipPath>',
+         f'    <clipPath id="clip-leg"><polygon points="{pts(band_leg(G.FORK, G.LEG_Y1))}"/></clipPath>',
          '  </defs>',
          '',
-         '  <g clip-path="url(#bloc)">',
-         f'    <polygon points="{pts(ext)}" fill="{PIERRE["jambage_ombre"]}"/>',
+         '  <g clip-path="url(#clip-block)">',
+         f'    <polygon points="{pts(outer)}" fill="{STONE["stem_shade"]}"/>',
          '',
-         "    <!-- une seule lumiere, venant du haut-gauche : la face tournee",
-         '         vers elle est claire, l\'autre est dans l\'ombre -->']
-    for cid, nom, parts in (
-        ("jambage", "jambage", [(bande_jambage(-5, SPLIT_JAMBAGE), "jambage_clair"),
-                                (bande_jambage(SPLIT_JAMBAGE, G.SR), "jambage_ombre")]),
-        ("haute", "branche haute", [(bande_haute(G.ARM_Y0 - D, SPLIT_HAUTE), "haute_clair"),
-                                    (bande_haute(SPLIT_HAUTE, G.FORK), "haute_ombre")]),
-        ("basse", "branche basse", [(bande_basse(G.FORK, SPLIT_BASSE), "basse_clair"),
-                                    (bande_basse(SPLIT_BASSE, G.LEG_Y1 + D), "basse_ombre")])):
-        L.append(f'    <g id="{nom.replace(" ", "-")}" clip-path="url(#{cid})">')
+         "    <!-- a single light, coming from the top left: the face turned",
+         '         towards it is lit, the other is in shadow -->']
+    for cid, name, parts in (
+        ("clip-stem", "stem", [(band_stem(-5, SPLIT_STEM), "stem_lit"),
+                               (band_stem(SPLIT_STEM, G.SR), "stem_shade")]),
+        ("clip-arm", "arm", [(band_arm(G.ARM_Y0 - D, SPLIT_ARM), "arm_lit"),
+                             (band_arm(SPLIT_ARM, G.FORK), "arm_shade")]),
+        ("clip-leg", "leg", [(band_leg(G.FORK, SPLIT_LEG), "leg_lit"),
+                             (band_leg(SPLIT_LEG, G.LEG_Y1 + D), "leg_shade")])):
+        L.append(f'    <g id="{name}" clip-path="url(#{cid})">')
         for poly, c in parts:
-            L.append(f'      <polygon points="{pts(poly)}" fill="{PIERRE[c]}"/>')
+            L.append(f'      <polygon points="{pts(poly)}" fill="{STONE[c]}"/>')
         L.append('    </g>')
 
-    L += ['', '    <!-- la fente comblee : levre de pierre, resine, menisque -->',
-          '    <g id="fente">']
-    for tr, lg in ((TRACE, LARG), (TRACE_BRAS, LARG_BRAS)):
-        L.append(f'      <polygon points="{pts(G.ribbon(tr, [x * 1.25 for x in lg]))}"'
-                 f' fill="{FENTE["levre_pierre"]}"/>')
-        L.append(f'      <polygon points="{pts(G.ribbon(tr, lg))}" fill="{FENTE["corps"]}"/>')
-        L.append(f'      <polygon points="{pts(G.ribbon(tr, [x * 0.26 for x in lg], -1.1))}"'
-                 f' fill="{FENTE["menisque"]}"/>')
+    L += ['', '    <!-- the filled seam: stone lip, resin, meniscus -->',
+          '    <g id="seam">']
+    for vein, w in ((VEIN_STEM, W_STEM), (VEIN_ARM, W_ARM)):
+        L.append(f'      <polygon points="{pts(G.ribbon(vein, [x * 1.25 for x in w]))}"'
+                 f' fill="{SEAM["stone_lip"]}"/>')
+        L.append(f'      <polygon points="{pts(G.ribbon(vein, w))}" fill="{SEAM["body"]}"/>')
+        L.append(f'      <polygon points="{pts(G.ribbon(vein, [x * 0.26 for x in w], -1.1))}"'
+                 f' fill="{SEAM["meniscus"]}"/>')
     L.append('    </g>')
 
-    L += ['', '    <!-- biseau : une arete vive, puis le pan principal -->', '    <g id="biseau">']
-    for poly, c in G.bevel_ring(ext, arete, vif):
+    L += ['', '    <!-- bevel: a keen edge, then the main facet -->', '    <g id="bevel">']
+    for poly, c in G.bevel_ring(outer, edge, keen):
         L.append(f'      <polygon points="{pts(poly)}" fill="{c}"/>')
-    for poly, c in G.bevel_ring(arete, dedans, RAMPE):
+    for poly, c in G.bevel_ring(edge, inner, RAMP):
         L.append(f'      <polygon points="{pts(poly)}" fill="{c}"/>')
     L += ['    </g>', '  </g>', '</svg>']
     return "\n".join(L) + "\n"
 
+VARIANTS = [("kyanite-icon", G.ON_DARK), ("kyanite-icon-light", G.ON_LIGHT)]
 if __name__ == "__main__":
-    p = os.path.join(OUT, "kyanite-icon.svg")
-    open(p, "w").write(ecris())
-    print(f"ecrit {p}  {os.path.getsize(p) / 1024:.1f} Ko")
+    for slug, theme in VARIANTS:
+        p = os.path.join(OUT, slug + ".svg")
+        open(p, "w").write(write_svg(theme))
+        print(f"wrote {slug:<22} {os.path.getsize(p) / 1024:.1f} KB"
+              f"   keen edge {G.check_ground(theme):.2f}:1 on {theme['ground']}")
