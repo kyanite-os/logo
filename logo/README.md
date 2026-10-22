@@ -19,6 +19,11 @@ et l'icône est trop nue en grand.
 
 Pour tout reconstruire : `sh ../outils/construire.sh`.
 
+**Les fichiers livrés sont déjà optimisés** — inutile de les repasser
+dans un compresseur. Les SVG sont passés par svgo, les PNG par
+pngquant puis oxipng : 226 Ko → 79 Ko pour le jeu complet, sans
+différence visible.
+
 ## Palette
 
 Le logo est **réglé pour fond sombre**. Fond de référence : `#0F1522`.
