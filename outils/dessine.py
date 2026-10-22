@@ -175,7 +175,7 @@ def build(title, dose_plans, force_paillettes, seed=81177, resine=None):
 
 # Deux molettes : l'opacite des plans traversants, la taille des paillettes.
 VARIANTS = [
-    ("kyanite-logo", "K", 1.55, 1.30, None),
+    ("kyanite-logo", "K", 1.55, 1.30, G.RESINE_CLAIRE),
 ]
 if __name__ == "__main__":
     os.makedirs(OUT, exist_ok=True)

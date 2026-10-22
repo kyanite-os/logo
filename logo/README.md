@@ -1,6 +1,7 @@
 # Le logo de Kyanite
 
-Un K taillé dans un bloc de kyanite, pour fond sombre.
+Un K taillé dans un bloc de kyanite, traversé d'un filon de résine
+qui en scelle la fracture. Pour fond sombre.
 
 ![Le logotype Kyanite](png/banniere.png)
 
@@ -47,7 +48,8 @@ La palette complète :
 |---|---|
 | la roche, 9 valeurs | `#15306A` `#1B3B7C` `#21468E` `#2851A0` `#2E5CB1` `#3668C1` `#3F75CE` `#4A83DA` `#5793E4` |
 | le biseau, 5 valeurs | `#112A58` `#1C4184` `#3A74C8` `#86B7F2` `#DBEBFF` |
-| la fente | creux `#15376E` · fond `#0E2650` · paroi éclairée `#3570C4` · lèvre `#8FBDF4` |
+| la fente comblée | lèvre de pierre `#12305F` · résine `#9CC6F4` · cœur `#7FB3EE` · ménisque `#F2F8FF` · reflet `#C6DFFA` |
+| bulles dans la résine | `#F7FBFF` `#285AA6` |
 | paillettes | `#C6DEFA` `#A8CCF4` `#88B8F0` `#6AA0E8` `#4D86DA` |
 | quartz, mica | `#86B6EE` `#A8CCF4` · `#1C3C76` `#22477F` |
 | fractures | `#1E4588` `#6CA2E8` |

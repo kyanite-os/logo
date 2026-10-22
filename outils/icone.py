@@ -5,8 +5,9 @@ Meme silhouette que le logo complet, et rien d'autre : pas de grain,
 pas de lamelles, pas de fractures, pas de plans translucides, pas de
 paillettes. En dessous de 64 px tout cela ne fait plus que du bruit.
 
-Restent les trois choses qui survivent a 16 px : la silhouette, le
-contraste entre les trois traits, et la fente. Le biseau est elargi de
+Restent la silhouette, le contraste entre les trois traits, et la
+fente comblee — cette derniere disparait a 16 px, elle ne revient
+qu'a partir de 22. Le biseau est elargi de
 3 a 5 pour qu'il pese encore un demi-pixel a 16 px.
 """
 import os, sys
@@ -40,7 +41,14 @@ PIERRE = {"jambage_clair": "#3A74CA", "jambage_ombre": "#234C92",
           "haute_clair":   "#74ABEE", "haute_ombre":   "#4280D6",
           "basse_clair":   "#4D8ADA", "basse_ombre":   "#2E60B4"}
 RAMPE = ["#112A58", "#1C4184", "#3A74C8", "#86B7F2", "#DBEBFF"]
-FENTE = {"creux": "#12305F", "levre": "#8FBDF4"}
+# La fente est COMBLEE, comme dans le logo complet : une resine
+# translucide, et surtout un menisque continu le long de la levre
+# amont. C'est la continuite de ce filet, pas sa couleur, qui fait
+# lire « scelle » plutot que « casse ».
+# Ici les teintes sont aplaties : a 16 px, empiler des opacites ne
+# donne que de la bouillie. La valeur du corps est celle que donne la
+# resine du logo composee sur la pierre.
+FENTE = {"levre_pierre": "#163A74", "corps": "#7CA6E0", "menisque": "#EAF4FF"}
 
 # La fente, reduite a son trace principal : le jambage puis la branche haute.
 TRACE = [(17.5, 84.0), (23.0, 69.0), (19.5, 56.0), (25.0, 43.5), (21.5, 29.0), (23.5, 14.0)]
@@ -98,11 +106,14 @@ def ecris():
             L.append(f'      <polygon points="{pts(poly)}" fill="{PIERRE[c]}"/>')
         L.append('    </g>')
 
-    L += ['', "    <!-- la fente : la meme pierre, mais a l'ombre -->", '    <g id="fente">']
+    L += ['', '    <!-- la fente comblee : levre de pierre, resine, menisque -->',
+          '    <g id="fente">']
     for tr, lg in ((TRACE, LARG), (TRACE_BRAS, LARG_BRAS)):
-        L.append(f'      <polygon points="{pts(G.ribbon(tr, lg))}" fill="{FENTE["creux"]}"/>')
-        L.append(f'      <polygon points="{pts(G.ribbon(tr, [x * 0.3 for x in lg], -1.25))}"'
-                 f' fill="{FENTE["levre"]}"/>')
+        L.append(f'      <polygon points="{pts(G.ribbon(tr, [x * 1.25 for x in lg]))}"'
+                 f' fill="{FENTE["levre_pierre"]}"/>')
+        L.append(f'      <polygon points="{pts(G.ribbon(tr, lg))}" fill="{FENTE["corps"]}"/>')
+        L.append(f'      <polygon points="{pts(G.ribbon(tr, [x * 0.26 for x in lg], -1.1))}"'
+                 f' fill="{FENTE["menisque"]}"/>')
     L.append('    </g>')
 
     L += ['', '    <!-- biseau : une arete vive, puis le pan principal -->', '    <g id="biseau">']

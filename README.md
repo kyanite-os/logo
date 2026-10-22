@@ -5,6 +5,8 @@ fondée sur Fedora bootc, avec KDE Plasma : minimale et durcie.
 
 Son logo est un **K taillé dans un bloc de kyanite** — le minéral bleu
 dont le projet tire son nom, qui pousse en cristaux allongés en lames.
+Une fracture le traverse, comblée d'un filon clair : la pierre n'est
+pas cassée, elle est scellée.
 
 ![Le logo Kyanite](logo/png/banniere.png)
 

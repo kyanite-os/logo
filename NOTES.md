@@ -43,29 +43,45 @@ Par-dessus, des **fractures** brisées en travers du clivage.
 
 ## Les deux ajouts de ce tour
 
-**La fente** n'est pas blanche : c'est la même pierre, mais à l'ombre.
-Une rainure en V éclairée du haut-gauche — le creux est dans le noir,
-la paroi aval reçoit la lumière, la lèvre amont porte un filet clair.
+**La fente est comblée.** C'est le dernier changement de fond, et le
+plus important.
 
-Une cassure n'a ni deux lèvres parallèles, ni une largeur régulière,
-ni un reflet continu. Tout y est donc irrégulier à la petite échelle :
+Une fente ouverte dans le logo d'un système qui se vend comme immuable
+et durci dit le contraire de ce qu'on veut : on lit de la casse. Une
+fente **remplie** dit l'inverse — scellée, consolidée. En minéralogie
+c'est un filon secondaire qui colmate une fracture ; ailleurs c'est le
+kintsugi. Même langage minéral, message retourné.
 
-- le tracé divague, et chaque lèvre dérive indépendamment de l'autre ;
-- la largeur pince et gonfle ;
-- le fond est plus profond par endroits — toujours sombre, jamais
-  clair : c'est ce qui garde la continuité du trait ;
-- la paroi aval ne prend la lumière que par plages, et reste de son
-  côté : le creux n'est jamais recouvert de part en part ;
-- le filet de la lèvre amont est intermittent ;
-- des éclats manquent sur les bords ;
-- quatre fissures secondaires partent du tracé et s'éteignent.
+Ce qui fait lire « rempli » plutôt que « cassé » n'est pas la couleur,
+c'est **la continuité** :
+
+- un **ménisque** — la remontée de la résine contre la paroi — qui
+  court sans interruption le long de la lèvre amont. Une arête de
+  cassure, elle, donne un reflet haché. Il doit rester un filet :
+  large, il bave dès les petites tailles ;
+- des bords nets, et **aucun éclat manquant** : les écaillures de la
+  version ouverte sont supprimées ;
+- un liseré de pierre sombre dessous, qui pose le filon *dans* la
+  pierre au lieu de le faire flotter dessus ;
+- la matière est translucide, donc le grain transparaît au travers —
+  `fill-opacity`, pas un aplat ;
+- les fissures secondaires sont comblées elles aussi : c'est tout le
+  réseau qui est scellé.
+
+Le tracé garde ses irrégularités — il divague, il pince et gonfle, les
+deux lèvres dérivent indépendamment — mais moins que la cassure
+ouverte : la résine épouse la fracture, sa surface est lisse.
 
 Le bruit qui pilote tout cela est **lissé**. Un bruit décorrélé d'un
-point au suivant donnerait des dents de scie ; une cassure, elle,
+point au suivant donnerait des dents de scie ; une fracture, elle,
 dérive lentement.
 
-**Paillettes.** De petits éclats anguleux et des losanges semés le long
-de la crevasse, serrés vers la lèvre éclairée. Aucune forme en étoile.
+Deux dosages existent dans `outils/bloc.py` — `RESINE_CLAIRE`, retenue,
+et `RESINE_SOMBRE`, plus discrète et plus minérale.
+
+**Paillettes.** Elles deviennent des **bulles prises dans la résine** :
+petits éclats anguleux et losanges, clairs et sombres. Aucune forme en
+étoile.
 
 **Plans translucides.** La kyanite est transparente. Quinze larges plans
 à faible opacité se croisent suivant trois directions de clivage qui ne
@@ -87,9 +103,10 @@ contour rectiligne :
 2. **Les lamelles**, courtes et fines, prises entre les grandes. Ce sont
    des éclats, pas des traits qui traversent.
 3. **Le grain** granitique, à trois tailles, densité inégale.
-4. **Les fractures**, en travers du clivage, toutes de longueur,
-   largeur et contraste différents. Une sur trois ne prend pas la
-   lumière.
+4. **Les fractures** sèches, en travers du clivage, toutes de
+   longueur, largeur et contraste différents. Une sur trois ne prend
+   pas la lumière. Elles restent ouvertes, elles : ce sont des micro-
+   fêlures de surface, pas la fracture traversante.
 
 Le biseau est double : une arête vive étroite (0,8) qui s'écarte de son
 pan — plus sombre à l'ombre, plus vive au jour — puis le pan principal.

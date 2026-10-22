@@ -570,13 +570,13 @@ def fente(seed):
 # Deux dosages : laiteuse (on voit tout de suite que c'est rempli) ou
 # transparente (plus minerale, plus discrete).
 RESINE_CLAIRE = {
-    "levre_pierre": ("#14346C", 0.55),   # l'ancienne arete de cassure, dessous
-    "corps":        ("#A8CEF6", 0.62),   # la resine elle-meme
-    "coeur":        ("#86B8F0", 0.38),   # plus epaisse au milieu
-    "menisque":     ("#EAF4FF", 0.95),   # le bourrelet qui prend la lumiere
-    "reflet":       ("#CBE2FB", 0.34),   # retour de lumiere sur l'autre bord
-    "bulle_claire": ("#F2F8FF", 0.9),
-    "bulle_sombre": ("#2A5BA8", 0.55),
+    "levre_pierre": ("#12305F", 0.64),   # l'ancienne arete de cassure, dessous
+    "corps":        ("#9CC6F4", 0.60),   # la resine elle-meme
+    "coeur":        ("#7FB3EE", 0.42),   # plus epaisse au milieu du chenal
+    "menisque":     ("#F2F8FF", 0.97),   # le bourrelet qui prend la lumiere
+    "reflet":       ("#C6DFFA", 0.32),   # retour de lumiere sur l'autre bord
+    "bulle_claire": ("#F7FBFF", 0.9),
+    "bulle_sombre": ("#285AA6", 0.55),
 }
 RESINE_SOMBRE = {
     "levre_pierre": ("#12305F", 0.6),
@@ -603,16 +603,21 @@ def resine(seed, teintes):
         d = [max(0.0, W[i] * (1.0 + bd[i]) * 0.94) for i in range(n)]
         traces.append((P, W, g, d))
 
-        # la levre de pierre, sous la resine : la fracture reste lisible
-        out.append((ribbon2(P, [x * 1.2 for x in g], [x * 1.2 for x in d]),) + T["levre_pierre"])
+        # la levre de pierre, sous la resine : la fracture reste lisible,
+        # et ce liseré sombre pose le filon dans la pierre au lieu de le
+        # faire flotter dessus
+        out.append((ribbon2(P, [x * 1.22 for x in g], [x * 1.22 for x in d]),) + T["levre_pierre"])
         # le corps, translucide : le grain transparait
         out.append((ribbon2(P, g, d),) + T["corps"])
         # plus epaisse au milieu du chenal
         out.append((ribbon2(P, [x * 0.52 for x in g], [x * 0.52 for x in d]),) + T["coeur"])
-        # le menisque : continu, c'est lui qui dit « rempli »
-        out.append((ribbon2(P, [x * 1.02 for x in g], [-x * 0.66 for x in g]),) + T["menisque"])
-        # retour de lumiere sur le bord aval
-        out.append((ribbon2(P, [-x * 0.5 for x in d], [x * 0.98 for x in d]),) + T["reflet"])
+        # Le menisque : la remontee de la resine contre la paroi. C'est
+        # lui qui dit « rempli » — parce qu'il est CONTINU, la ou une
+        # arete de cassure donne un reflet hache. Il doit rester un
+        # filet : large, il bave des les petites tailles.
+        out.append((ribbon2(P, [x * 1.06 for x in g], [-x * 0.58 for x in g]),) + T["menisque"])
+        # retour de lumiere sur le bord aval, plus discret
+        out.append((ribbon2(P, [-x * 0.46 for x in d], [x * 1.0 for x in d]),) + T["reflet"])
         # bulles prises dans la resine
         for _ in range(int(n * 0.55)):
             i = rnd.randrange(n)
