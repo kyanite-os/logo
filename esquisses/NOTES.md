@@ -1,47 +1,63 @@
-# Esquisses — tour 1
+# Esquisses — tour 3 (direction « bloc taillé »)
 
-Quatre pistes à juger. Même squelette géométrique pour les quatre :
-seules la découpe et la matière changent.
+Fond sombre dans tous les cas. La palette est réglée pour ça.
 
-## Géométrie commune (viewBox 0 0 100 100)
+## Le dessin
 
-- Jambage : x 12 → 34, y 14 → 86 (épaisseur 22).
-- Point de jonction des deux branches : (34, 50).
-- Branches à pente 3:2, emprise 26 sur l'arête du jambage
-  (haute : y 24 → 50 ; basse : y 50 → 76).
-- Empreinte : x 12 → 88, y 14 → 86. Centrée.
-- Aucune perspective. Une seule direction de lumière : haut-gauche.
-  La face tournée vers le haut-gauche est claire, l'autre est dans l'ombre.
-- Le jambage est la masse la plus épaisse du cristal : il reste la zone
-  la plus dense. La branche haute est la lame la plus fine : la plus claire.
+Un K **taillé dans un bloc**, pas dessiné au trait.
 
-## Palette
+- **Rien de symétrique.** La branche haute monte à 4/7, la basse descend
+  à 5/8 ; elles n'ont ni la même longueur ni la même épaisseur ; les
+  tranchants ne sont pas à la même abscisse.
+- **Les angles sont coupés inégalement** : chaque sommet reçoit deux
+  coupes de longueurs différentes. Les arêtes longues portent de légers
+  décrochements, comme une arête reprise au ciseau.
+- **Un biseau d'épaisseur constante** fait le tour. Chaque pan prend sa
+  valeur de l'orientation de son arête sous **une seule lumière venant du
+  haut-gauche**. Aucune perspective : c'est une plaque chanfreinée vue de
+  face, pas un volume en 3D.
+
+## La matière
+
+Lue comme du granite, à trois échelles :
+
+1. **Les lames de kyanite** donnent la structure large et la lumière.
+   Plans de clivage jamais tout à fait parallèles.
+2. **Les plages**, de la taille d'un cristal de feldspath.
+3. **Le grain fin** : éclats clairs (quartz) et points sombres (mica).
+
+La densité du grain n'est pas uniforme : six foyers la font varier,
+pour que la roche ne soit pas un quadrillage.
+
+Par-dessus, des **fractures** brisées en travers du clivage : une lèvre
+à l'ombre, une au jour.
+
+## Les trois variantes
+
+- **I — granite** : la pierre seule.
+- **J — granite + filon** : un filon de cristal clair remonte le jambage
+  et fourche dans la branche haute.
+- **K — fond de mine** : pierre plus sombre, biseau plus contrasté,
+  filon plus vif.
+
+## Palette (fond sombre `#0F1522`)
 
 | rôle | hex |
 |---|---|
-| v1 — jambage, face d'ombre | `#27559F` |
-| v2 — veines sombres | `#3267B8` |
-| v3 — branches, faces d'ombre | `#3F7AD0` |
-| v4 — jambage, face éclairée | `#4F8EE0` |
-| v5 — branche basse, face éclairée | `#68A4EB` |
-| v6 — branche haute, face éclairée | `#8CBDF3` |
-| fond de fente | `#1A3A72` |
-| retombée de l'éclat | `#C3DDFA` |
-| accent — éclat du cœur | `#EAF4FF` |
-
-Plancher volontairement relevé : la valeur la plus sombre reste lisible
-sur fond `#11182A`.
-
-## Variantes
-
-- **A** — facettes nettes. 6 polygones.
-- **B** — A + veines : lames parallèles, vraies formes géométriques
-  (pas de `feTurbulence`, donc rendu identique partout).
-- **C** — A + branche haute fendue, cœur brillant.
-- **D** — B + fente.
+| roche, 9 valeurs | `#1B3C78` `#22488B` `#28539D` `#2F5FAF` `#366BC0` `#3F78CE` `#4A86DA` `#5795E4` `#67A4EC` |
+| biseau, 5 valeurs | `#17376F` `#21488F` `#3A74C8` `#72ACEE` `#BEDCFA` |
+| mica (points sombres) | `#1C3C76` `#22477F` |
+| quartz (éclats clairs) | `#86B6EE` `#A8CCF4` |
+| filon | cœur `#DCEBFE`, halo `#9DC4F3`, paroi `#122C5E` |
 
 ## Contraintes tenues
 
-Polygones uniquement, arêtes partagées exactement, aucun filtre,
-aucun bitmap, aucun dégradé. Une silhouette posée dessous évite
-tout liseré d'anticrénelage entre facettes adjacentes.
+Polygones uniquement. Aucun filtre, aucun bitmap, aucun dégradé.
+Les masques de découpe (`clipPath`) sont des polygones, supportés
+partout, contrairement à `feTurbulence`.
+
+## Reste à faire
+
+Une **version icône simplifiée** : à 32 et 16 px le grain et le filon
+deviennent du bruit. Elle ne sera dessinée qu'une fois la variante
+choisie.
