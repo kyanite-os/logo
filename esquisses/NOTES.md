@@ -15,7 +15,9 @@ Chaque pan du biseau prend sa valeur de l'orientation de son arête sous
   longueur, ni la même épaisseur, ni le tranchant à la même abscisse.
 - **Le sommet et le pied du jambage ne sont pas de même nature** :
   en haut une seule coupe oblique franche, d'un seul geste ; en bas un
-  gradin, le coin gauche resté en l'air, comme un bloc détaché.
+  angle droit franc à gauche — sans aucune coupe, le flanc reste
+  d'aplomb jusqu'au sol — et à droite un gradin, le coin resté en l'air
+  comme un bloc détaché.
 - Les angles reçoivent deux coupes de longueurs différentes.
 - Les arêtes longues portent des décrochements.
 
